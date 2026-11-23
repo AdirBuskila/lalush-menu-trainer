@@ -126,6 +126,31 @@ h2{font-size:20px;margin:18px 0 10px;font-weight:800}
 .dots{letter-spacing:2px}
 .sec{position:sticky;top:0;background:var(--paper);padding:10px 0 6px;z-index:2;font-weight:900;font-size:19px;color:var(--teal)}
 .sec small{display:block;color:var(--muted);font-weight:500;font-size:13px}
+/* learning path + memory aids */
+.learnbtn{display:flex;align-items:center;gap:14px;width:100%;margin-top:16px;padding:18px 16px;border-radius:22px;text-align:right;color:#3b2a06;background:linear-gradient(135deg,var(--gold2),var(--gold));box-shadow:0 8px 22px rgba(215,154,43,.35);animation:glow 2.2s infinite alternate}
+.learnbtn .ic{font-size:40px}
+.learnbtn b{display:block;font-size:19px;font-weight:900;margin:2px 0}
+.learnbtn small{display:block;font-size:13px;opacity:.85;line-height:1.35}
+.learnbtn .go{font-size:26px;font-weight:900}
+@keyframes glow{to{box-shadow:0 8px 30px rgba(215,154,43,.6)}}
+.path{display:flex;flex-direction:column;gap:8px;margin-bottom:8px;border-right:3px dashed #cdbfa6;padding-right:10px}
+.node{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow);text-align:right;width:100%}
+.node .nic{font-size:20px;min-width:30px;text-align:center}
+.node .t{flex:1}.node b{display:block;font-size:15px;line-height:1.35}.node small{color:var(--muted)}
+.node.done{background:#f1f8f3}
+.node.next{outline:3px solid var(--gold);background:#fff8e8}
+.node.review{background:#eef4f6}
+.aid{background:var(--paper2);border-radius:12px;padding:9px 12px;margin-top:8px;font-size:14px;line-height:1.55}
+.aid.warn{background:#fff1e6;border-right:4px solid var(--warn)}
+.acr{display:block;font-weight:900;color:var(--teal);font-size:18px;letter-spacing:1px;margin-top:2px}
+.chip.sig{background:#fff3d1;border-color:var(--gold)}
+.chip.sig:after{content:" ⭐"}
+.chips.num .chip i{font-style:normal;font-weight:900;background:var(--teal);color:#fff;border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;margin-left:7px;font-size:11px;vertical-align:1px}
+.chip.blank{background:#fff;border:2px dashed var(--gold);color:var(--gold);font-weight:900;min-width:60px;text-align:center}
+.chip.hidden{background:#e5dccb;color:transparent;border-color:#d8ccb5;cursor:pointer}
+.chip.hidden span{filter:blur(6px)}
+.chip.hidden{min-width:90px}
+.note.teal{border-color:var(--teal);background:#eef4f6}
 /* results */
 .score{font-size:64px;font-weight:900;text-align:center;color:var(--teal);margin:6px 0 0}
 .grade{text-align:center;font-size:20px;font-weight:800;margin-bottom:8px}
@@ -162,12 +187,6 @@ window.CATS = [
   { id: "mains", name: "עיקריות", emoji: "🍗", note: "דגה טרייה", group: "food" },
   { id: "pasta", name: "מארץ המגף", emoji: "🍝", note: "פסטה טרייה | הפסטות מוגשות עם פרמז'ן", group: "food" },
   { id: "breakfast", name: "ארוחות בוקר", emoji: "☀️", note: "מוגש עד השעה 12:00", group: "food" },
-  { id: "hot", name: "משקאות חמים", emoji: "☕", note: "תוספת קצפת — 8₪", group: "drinks" },
-  { id: "cold", name: "משקאות קרים", emoji: "🥤", note: "", group: "drinks" },
-  { id: "special", name: "ספיישללוש", emoji: "✨", note: "תוספת קצפת — 8₪", group: "drinks" },
-  { id: "ice", name: "אייסים וסחוט טרי", emoji: "🧊", note: "", group: "drinks" },
-  { id: "shakes", name: "שייקים", emoji: "🥭", note: "", group: "drinks" },
-  { id: "pastry", name: "קפה ומאפה", emoji: "🥐", note: "מאפים 16₪: שוקולד / שקדים / קינמון / גבינה / חמאה", group: "drinks" },
 ];
 
 window.DISHES = [
@@ -408,70 +427,6 @@ window.DISHES = [
     d: "לחם בריוש קלוי בחמאה, קרם שמנת, סלמון מעושן, ביצים עלומות, הולנדייז פרמז'ן, סלט ירקות.",
     i: ["לחם בריוש קלוי בחמאה", "קרם שמנת", "סלמון מעושן", "ביצים עלומות", "הולנדייז פרמז'ן", "סלט ירקות"] },
 
-  // ---------- משקאות חמים ----------
-  { id: "d-esp", c: "hot", n: "אספרסו קצר / ארוך", p: 11 },
-  { id: "d-desp", c: "hot", n: "אספרסו כפול קצר / ארוך", p: 13 },
-  { id: "d-mac", c: "hot", n: "מקיאטו קצר / ארוך", p: 11 },
-  { id: "d-dmac", c: "hot", n: "מקיאטו כפול קצר / ארוך", p: 13 },
-  { id: "d-macna", c: "hot", n: "מקיאטונה", p: 12 },
-  { id: "d-latte", c: "hot", n: "לאטה מקיאטו", p: 18 },
-  { id: "d-nes", c: "hot", n: "נס קפה על בסיס חלב / מים", p: 14 },
-  { id: "d-capp", c: "hot", n: "קפוצ'ינו", p: "14/18" },
-  { id: "d-amer", c: "hot", n: "אמריקנו חם / קר", p: "12/14" },
-  { id: "d-black", c: "hot", n: "קפה שחור", p: 10 },
-  { id: "d-choco", c: "hot", n: "שוקו חם / קר", p: 16 },
-  { id: "d-french", c: "hot", n: "פרנץ' וניל", p: 18 },
-  { id: "d-mocca", c: "hot", n: "מוקצ'ינו", p: 23 },
-  { id: "d-tea", c: "hot", n: "תה / מים חמים עם נענע", p: 14 },
-  { id: "d-health", c: "hot", n: "תה בריאות", p: 18, d: "מקל קינמון, ג'ינג'ר, דבש.", i: ["מקל קינמון", "ג'ינג'ר", "דבש"] },
-  { id: "d-cider", c: "hot", n: "סיידר חם", p: 20 },
-  { id: "d-sahlab", c: "hot", n: "סחלב חם", p: 22 },
-  { id: "d-chai", c: "hot", n: "צ'אי הודי", p: 20 },
-  { id: "d-sangria", c: "hot", n: "סנגריה קרה / חמה", p: 40 },
-
-  // ---------- קפה ומאפה ----------
-  { id: "d-cp-big", c: "pastry", n: "קפה גדול ומאפה לבחירה", p: 28 },
-  { id: "d-cp-small", c: "pastry", n: "קפה קטן ומאפה לבחירה", p: 25 },
-  { id: "d-pastry", c: "pastry", n: "מאפה", p: 16, d: "שוקולד / שקדים / קינמון / גבינה / חמאה.", i: ["שוקולד", "שקדים", "קינמון", "גבינה", "חמאה"], x: ["אלה הטעמים לבחירה"] },
-
-  // ---------- משקאות קרים ----------
-  { id: "d-coke", c: "cold", n: "קוקה-קולה", p: 14 },
-  { id: "d-diet", c: "cold", n: "דיאט קולה / קולה זירו", p: 14 },
-  { id: "d-sprite", c: "cold", n: "ספרייט / ספרייט זירו", p: 14 },
-  { id: "d-fanta", c: "cold", n: "פאנטה", p: 14 },
-  { id: "d-soda", c: "cold", n: "סודה", p: 12 },
-  { id: "d-fuze", c: "cold", n: "פיוז-טי", p: 14 },
-  { id: "d-water", c: "cold", n: "מים מינרלים", p: 13 },
-  { id: "d-fwater", c: "cold", n: "מים בטעמים — אפרסק / תפוח / ענבים", p: 14 },
-  { id: "d-perrier", c: "cold", n: "פררלה", p: "14/24" },
-  { id: "d-lemonade", c: "cold", n: "לימונדה", p: "15/18" },
-  { id: "d-grape", c: "cold", n: "פריגת ענבים", p: 14 },
-  { id: "d-malt", c: "cold", n: "מאלטי — בירה שחורה", p: 16 },
-  { id: "d-energy", c: "cold", n: "משקה אנרגיה", p: 16 },
-  { id: "d-somersby", c: "cold", n: "סומרסבי — סיידר תפוחים אלכוהולי", p: 23 },
-
-  // ---------- ספיישללוש ----------
-  { id: "d-irish", c: "special", n: "קפה אייריש קרים", p: 20 },
-  { id: "d-affogato", c: "special", n: "אפוגטו", p: 23, d: "כדור גלידה וניל ואספרסו.", i: ["כדור גלידה וניל", "אספרסו"] },
-  { id: "d-belgian", c: "special", n: "שוקו בלגי", p: 22, d: "חלב חם עם מטבעות שוקולד בלגי.", i: ["חלב חם", "מטבעות שוקולד בלגי"] },
-  { id: "d-berry", c: "special", n: "חליטת תה פירות יער", p: 20 },
-  { id: "d-louisa", c: "special", n: "חליטת תה לימונית לואיזה", p: 20 },
-
-  // ---------- אייסים וסחוט טרי ----------
-  { id: "d-iceCoffee", c: "ice", n: "אייס קפה", p: "18/22" },
-  { id: "d-coldCoffee", c: "ice", n: "קפה קר", p: "18/22" },
-  { id: "d-icePecan", c: "ice", n: "אייס קפה פקאן", p: "24/26" },
-  { id: "d-limonana", c: "ice", n: "לימונענע גרוס", p: "20/22" },
-  { id: "d-limonarak", c: "ice", n: "לימונערק גרוס", p: 33, d: "ערק, לימונדה ונענע.", i: ["ערק", "לימונדה", "נענע"] },
-  { id: "d-carrot", c: "ice", n: "מיץ גזר סחוט טרי", p: "18/22" },
-  { id: "d-orange", c: "ice", n: "מיץ תפוזים סחוט טרי", p: "18/22" },
-  { id: "d-apple", c: "ice", n: "מיץ תפוחים סחוט טרי", p: "18/22" },
-
-  // ---------- שייקים ----------
-  { id: "d-mango", c: "shakes", n: "משקה מנגונענע", p: 32, d: "מנגו, נענע, מיץ תפוזים סחוט טרי.", i: ["מנגו", "נענע", "מיץ תפוזים סחוט טרי"] },
-  { id: "d-oreo", c: "shakes", n: "משקה אוראו וניל", p: 35, d: "אייס קפה, גלידה וניל, שבבי אוראו, קצפת.", i: ["אייס קפה", "גלידה וניל", "שבבי אוראו", "קצפת"] },
-  { id: "d-fruit", c: "shakes", n: "שייק פירות", p: 32, d: "תות, בננה, תמר, מלון, אננס, מנגו. על בסיס חלב/מים/תפוזים/סויה.", i: ["תות", "בננה", "תמר", "מלון", "אננס", "מנגו"], x: ["על בסיס: חלב / מים / תפוזים / סויה"] },
-  { id: "d-milkshake", c: "shakes", n: "מילקשייק", p: 32, d: "וניל עוגיות, שוקולד בלגי, וניל.", i: ["וניל עוגיות", "שוקולד בלגי", "וניל"], x: ["אלה הטעמים לבחירה"] },
 ];
 
 // Facts the examiner is likely to ask that don't fit an ingredient question.
@@ -486,21 +441,15 @@ window.FACTS = [
   { c: "pasta", q: "עם מה מוגשות כל הפסטות?", a: "פרמז'ן", w: ["לחם שום", "מקל פוקאצ'ה", "סלט ירוק"] },
   { c: "pasta", q: "איזו פסטה מסומנת כחריפה 🌶️?", a: "פפרדלה ארביאטה", w: ["בוסייטה אלי אוליו פלוס", "ריגטוני טריו", "בוסייטה בולונז"] },
   { c: "pasta", q: "אילו רטבים אפשר לבחור בריגטוני טריו?", a: "עגבניות ביתי / עגבניות ושמנת / שמנת", w: ["עגבניות / פסטו / שמנת", "שמנת / רוזה / אלפרדו", "עגבניות / שמנת פטריות / פסטו"] },
-  { c: "dough", q: "כמה עולה תוספת לפיצה מרגריטה?", a: "6₪", w: ["5₪", "8₪", "10₪"] },
   { c: "dough", q: "איזו מהבאות היא לא תוספת לפיצה מרגריטה?", a: "תירס", w: ["זיתי קלמטה", "בצל סגול", "בולגרית"] },
   { c: "dough", q: "איזו פוקאצ'ה מסומנת כטבעונית?", a: "פוקאצ'ה קלאסית", w: ["פוקאצ'ה חריפים", "פוקאצ'ה פרמז'ן", "פוקאצ'ה סלמון לימונית"] },
-  { c: "salads", q: "כמה עולה תוספת חזה עוף בגריל לקיסר?", a: "19₪", w: ["12₪", "15₪", "22₪"] },
-  { c: "salads", q: "כמה עולה תוספת בולגרית לסלט אגוזים, שקדים ודברים טובים?", a: "12₪", w: ["6₪", "8₪", "15₪"] },
   { c: "salads", q: "איך מגישים את סלט עוף הדרים בגרסה טבעונית?", a: "ללא העוף, עם פטריות פורטובלו בגריל", w: ["עם טופו בגריל במקום העוף", "ללא העוף, עם חציל קלוי", "עם המבורגר טבעוני פרוס"] },
   { c: "salads", q: "איך הופכים את בורגול לאבנה לטבעוני?", a: "ללא הלאבנה", w: ["ללא השקדים", "עם טחינה במקום לאבנה", "אי אפשר"] },
   { c: "salads", q: "איך הופכים את כל ישראלי לטבעוני?", a: "ללא הגבינה", w: ["ללא הזיתים", "ללא הויניגרט", "עם טחינה"] },
   { c: "salads", q: "איזה סלט טבעוני כמו שהוא?", a: "אגוזים, שקדים ודברים טובים", w: ["קיסר קלאסי", "סלק ברי ופקאן", "קפרזה מוצרלה פרסקה"] },
-  { c: "mains", q: "כמה עולה תוספת גבינה כחולה או צ'דר להמבורגר?", a: "10₪", w: ["6₪", "8₪", "12₪"] },
-  { c: "mains", q: "כמה עולה תוספת בצל מטוגן / ביצת עין / פטריות להמבורגר?", a: "6₪", w: ["5₪", "8₪", "10₪"] },
   { c: "mains", q: "איפה מכינים את ההמבורגר הטבעוני?", a: "אפוי בטאבון", w: ["בגריל", "על הפלאנצ'ה", "מטוגן במחבת"] },
   { c: "mains", q: "על מה מוגש הכבד עוף?", a: "פירה תפו״א ובטטה קטיפתי", w: ["אורז עשבי תיבול ושקדים", "בייבי תפו״א בשום", "ירקות ירוקים מוקפצים"] },
   { c: "mains", q: "על מה מוגש חזה העוף?", a: "אורז עשבי תיבול ושקדים", w: ["פירה תפו״א ובטטה", "בייבי תפו״א ועשבי תיבול", "ירקות ירוקים מוקפצים"] },
-  { c: "mains", q: "מה המנה העיקרית הכי יקרה?", a: "סלמון על ירקות ירוקים", w: ["פילה בס", "פרגית על תפו״א", "המבורגר עגל עסיסי"] },
   { c: "starters", q: "כמה ארנצ'יני יש במנה?", a: "3", w: ["2", "4", "5"] },
   { c: "starters", q: "במה מטוגנת הכרובית בפרחי כרובית?", a: "קמח מתובל", w: ["פירורי פנקו", "בלילת בירה", "קמח חומוס"] },
   { c: "starters", q: "איזו מנה ראשונה מסומנת כטבעונית?", a: "פרחי כרובית", w: ["קרפצ'יו חציל בטאבון", "קריספי עלי גפן על לאבנה", "ארטישוק א לה רומאנה"] },
@@ -508,7 +457,6 @@ window.FACTS = [
   { c: "brunch", q: "מה ההבדל בין שקשוקה כפרית לשקשוקה אדומה?", a: "בכפרית יש גם תרד, מיקס פטריות, שום וקרם שמנת", w: ["בכפרית יש גם גבינה בולגרית וזיתים", "בכפרית יש 3 ביצים", "הכפרית מוגשת עם פוקאצ'ה במקום חלה"] },
   { c: "brunch", q: "עם מה מוגשות השקשוקות?", a: "סלט ירקות, טחינה, זיתים מתובלים וחלה", w: ["סלט ירקות, לאבנה ופוקאצ'ה", "טחינה, סלסת עגבניות ולחם קסטן", "סלט ירקות, חמאה וריבה"] },
   { c: "breakfast", q: "אילו סוגי ביצים אפשר לבחור בבוקר טוב לשניים?", a: "מקושקשת / חביתה / עין / עין הפוכה", w: ["מקושקשת / חביתה / עלומה / קשה", "עין / עין הפוכה / קשה / רכה", "מקושקשת / עין / עלומה / חביתת ירק"] },
-  { c: "breakfast", q: "כמה עולה תוספת בתשלום בבוקר טוב לשניים?", a: "5₪", w: ["6₪", "8₪", "10₪"] },
   { c: "breakfast", q: "מה התוספות בתשלום בבוקר טוב לשניים?", a: "פרמז'ן / מיקס פטריות / בולגרית / צהובה", w: ["אבוקדו / סלמון / בולגרית / צהובה", "עשבי תיבול / בצל / פטריות / פרמז'ן", "ביצה נוספת / בולגרית / אבוקדו / טונה"] },
   { c: "breakfast", q: "מה התוספות שאפשר לבחור בבוקר טוב לשניים בלי תשלום?", a: "עשבי תיבול / בצל", w: ["פטריות / בצל", "פרמז'ן / עשבי תיבול", "עגבניה / בצל"] },
   { c: "breakfast", q: "איזו שתיה חמה אפשר לבחור בבוקר טוב לשניים?", a: "קפוצ'ינו / אספרסו / תה", w: ["קפוצ'ינו / אמריקנו / תה", "כל שתיה חמה מהתפריט", "קפוצ'ינו / לאטה / שוקו"] },
@@ -517,15 +465,6 @@ window.FACTS = [
   { c: "breakfast", q: "מאיזה קמח החביתה בבוקר ללוש טבעוני?", a: "קמח עדשים אדומות (עם גזר ופטרוזיליה)", w: ["קמח חומוס (עם בצל ירוק)", "קמח תירס (עם עשבי תיבול)", "קמח כוסמין (עם תרד)"] },
   { c: "breakfast", q: "אילו לחמים אפשר לבחור בבוקר טוב לשניים?", a: "פוקאצ'ה / לחם לבן / מלא", w: ["חלה / לחם לבן / מלא", "פוקאצ'ה / בריוש / קסטן", "לחם לבן / מלא / שיפון"] },
   { c: "breakfast", q: "איזה לחם יש באגז בנדיקט ובפרנצ'טוסט?", a: "לחם בריוש קלוי בחמאה", w: ["חלה קלויה", "לחם קסטן", "פוקאצ'ה"] },
-  { c: "hot", q: "מה יש בתה בריאות?", a: "מקל קינמון, ג'ינג'ר, דבש", w: ["נענע, לימון, דבש", "ג'ינג'ר, לימון, נענע", "קינמון, הל, סוכר"] },
-  { c: "hot", q: "כמה עולה תוספת קצפת?", a: "8₪", w: ["5₪", "6₪", "10₪"] },
-  { c: "pastry", q: "אילו טעמי מאפים יש?", a: "שוקולד / שקדים / קינמון / גבינה / חמאה", w: ["שוקולד / וניל / קינמון / גבינה", "שקדים / פיסטוק / שוקולד / חמאה", "שוקולד / גבינה / תפוחים / חמאה"] },
-  { c: "pastry", q: "כמה עולה מאפה לבד?", a: "16₪", w: ["12₪", "14₪", "18₪"] },
-  { c: "shakes", q: "על איזה בסיס אפשר להכין שייק פירות?", a: "חלב / מים / תפוזים / סויה", w: ["חלב / יוגורט / מים", "חלב / שקדים / סויה", "רק חלב או מים"] },
-  { c: "ice", q: "מה יש בלימונערק גרוס?", a: "ערק, לימונדה ונענע", w: ["וודקה, לימונדה ונענע", "ערק, מיץ תפוזים ונענע", "ערק, סודה ולימון"] },
-  { c: "cold", q: "מה זה סומרסבי?", a: "סיידר תפוחים אלכוהולי", w: ["בירה שחורה", "מים בטעם תפוח", "משקה אנרגיה"] },
-  { c: "cold", q: "מה זה מאלטי?", a: "בירה שחורה", w: ["סיידר תפוחים", "משקה אנרגיה", "סודה בטעמים"] },
-  { c: "cold", q: "אילו טעמים יש למים בטעמים?", a: "אפרסק / תפוח / ענבים", w: ["אפרסק / לימון / ענבים", "תפוח / אבטיח / ענבים", "אפרסק / תפוח / תות"] },
 ];
 
 </script>
@@ -533,14 +472,15 @@ window.FACTS = [
 "use strict";
 // ================= state =================
 const LS = "lalush-trainer-v1";
-const S = Object.assign({ m:{}, xp:0, best:{sprint:0, exam:0}, day:{last:"", count:0}, cats:null, sound:true, answered:0, correct:0 },
+const S = Object.assign({ m:{}, xp:0, best:{sprint:0, exam:0}, day:{last:"", count:0}, cats:null, sound:true, answered:0, correct:0, lessons:{} },
   (() => { try { return JSON.parse(localStorage.getItem(LS) || "{}"); } catch (e) { return {}; } })());
-if (!S.cats) S.cats = CATS.map(c => c.id);
 const save = () => { try { localStorage.setItem(LS, JSON.stringify(S)); } catch (e) {} };
 
 const CAT = Object.fromEntries(CATS.map(c => [c.id, c]));
+S.cats = (S.cats || []).filter(id => CAT[id]);
+if (!S.cats.length) S.cats = CATS.map(c => c.id);
+S.lessons = S.lessons || {};
 const FACTS2 = FACTS.map((f, k) => ({ ...f, id: "f" + k, fact: 1 }));
-const FOOD = DISHES.filter(d => CAT[d.c].group === "food");
 const $app = document.getElementById("app");
 
 // ================= helpers =================
@@ -548,7 +488,6 @@ const rnd = n => Math.floor(Math.random() * n);
 const pick = a => a[rnd(a.length)];
 const shuffle = a => { a = a.slice(); for (let k = a.length - 1; k > 0; k--) { const j = rnd(k + 1); [a[k], a[j]] = [a[j], a[k]]; } return a; };
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]));
-const priceTxt = p => typeof p === "number" ? p + "₪" : String(p).replace("/", "₪ / ") + "₪";
 const mastery = id => S.m[id] || 0;
 const MAXM = 4;
 const STOP = new Set(["על","עם","של","טרי","טריה","טריות","טריים","קלוי","קלויה","קלויים","צלוי","מגורר","מבחר","מיקס","קרם","רוטב","גבינת","זילופי","עלי","בצל","ממרח","קוביות","ביתי","עשבי","לבחירה","מוקפצים","דק","המון","פרוס","תיבול"]);
@@ -561,7 +500,43 @@ function similar(a, b) {
 const hasIng = (d, ing) => (d.i || []).some(x => similar(x, ing));
 const enabledDishes = () => DISHES.filter(d => S.cats.includes(d.c));
 const enabledFacts = () => FACTS2.filter(f => S.cats.includes(f.c));
+const dots = m => `<span class="dots">${"●".repeat(m)}${"○".repeat(MAXM - m)}</span>`;
 
+// ================= memory aids =================
+// Signature = ingredients no other dish has. Twin = the dish it's easiest to confuse it with.
+const SIG = {}, TWIN = {};
+DISHES.forEach(d => {
+  SIG[d.id] = (d.i || []).filter(ing => !DISHES.some(o => o !== d && hasIng(o, ing)));
+  let best = null;
+  const strict = (x, y) => x === y || x.includes(y) || y.includes(x);
+  const has = (dd, ing) => dd.i.some(x => strict(x, ing));
+  DISHES.forEach(o => {
+    if (o === d || !o.i || !d.i) return;
+    const shared = d.i.filter(x => has(o, x));
+    const raw = shared.length / Math.min(d.i.length, o.i.length);
+    if (o.c !== d.c && raw < .75) return;
+    const score = raw + (o.c === d.c ? .25 : 0);
+    if (shared.length >= 2 && (!best || score > best.score)) best = { o, score };
+  });
+  if (best && best.score >= .6) {
+    const here = d.i.filter(x => !has(best.o, x)), there = best.o.i.filter(x => !has(d, x));
+    if (here.length || there.length) TWIN[d.id] = { o: best.o, here: here.slice(0, 6), there: there.slice(0, 6) };
+  }
+});
+const acronym = d => (d.i || []).map(x => x.replace(/^[0-9 ]+/, "").trim()[0]).join(" · ");
+
+function aidsHTML(d) {
+  const sig = SIG[d.id] || [], tw = TWIN[d.id];
+  let h = `<div class="aid"><b>🔤 ראשי תיבות לזכירה:</b> <span class="acr">${esc(acronym(d))}</span> <small>(${d.i.length} רכיבים)</small></div>`;
+  if (sig.length) h += `<div class="aid"><b>⭐ רק במנה הזו בכל התפריט:</b> ${sig.map(esc).join(", ")}</div>`;
+  if (tw) h += `<div class="aid warn"><b>⚠️ אל תתבלבלי עם ${esc(tw.o.n)}</b>
+    ${tw.here.length ? `<div>✓ רק כאן: ${tw.here.map(esc).join(", ")}</div>` : ""}
+    ${tw.there.length ? `<div>✗ רק שם: ${tw.there.map(esc).join(", ")}</div>` : ""}</div>`;
+  return h;
+}
+const ingChips = d => `<div class="chips num">${d.i.map((t, k) => `<span class="chip ro ${SIG[d.id].includes(t) ? "sig" : ""}"><i>${k + 1}</i>${esc(t)}</span>`).join("")}</div>`;
+
+// ================= progress =================
 function bump(id, ok) {
   const m = mastery(id);
   S.m[id] = ok ? Math.min(MAXM, m + 1) : Math.max(0, m - 2);
@@ -622,7 +597,7 @@ function beep(kind) {
       o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + d + .02); t += d * .9;
     });
   } catch (e) {}
-  if (navigator.vibrate) navigator.vibrate(kind === "bad" ? [60, 40, 60] : kind === "ok" ? 15 : 0);
+  try { if (navigator.vibrate && navigator.userActivation && navigator.userActivation.hasBeenActive) navigator.vibrate(kind === "bad" ? [60, 40, 60] : kind === "ok" ? 15 : 0); } catch (e) {}
 }
 const cf = document.getElementById("cf"), cx = cf.getContext("2d"); let parts = [], cfOn = false;
 function confetti(n = 120) {
@@ -640,18 +615,22 @@ function cfLoop() {
 
 // ================= question generation =================
 function weightedPick(items) {
-  const w = items.map(it => { const m = mastery(it.id); return ((MAXM + 1 - m) ** 2 + (S.m[it.id] === undefined ? 3 : 0)) * (it.fact ? .6 : it.i ? 1 : .3); });
+  const w = items.map(it => { const m = mastery(it.id); return ((MAXM + 1 - m) ** 2 + (S.m[it.id] === undefined ? 3 : 0)) * (it.fact ? .6 : 1); });
   let r = Math.random() * w.reduce((a, b) => a + b, 0);
   for (let k = 0; k < items.length; k++) { r -= w[k]; if (r <= 0) return items[k]; }
   return items[items.length - 1];
 }
 function peers(d, pool, n, filter) {
   const same = shuffle(pool.filter(x => x !== d && x.c === d.c && (!filter || filter(x))));
-  const other = shuffle(pool.filter(x => x !== d && x.c !== d.c && CAT[x.c].group === CAT[d.c].group && (!filter || filter(x))));
+  const other = shuffle(pool.filter(x => x !== d && x.c !== d.c && (!filter || filter(x))));
   return same.concat(other).slice(0, n);
 }
 function distractors(d, n) {
-  const near = shuffle(DISHES.filter(x => x !== d && x.i && CAT[x.c].group === CAT[d.c].group).flatMap(x => x.i));
+  // Prefer ingredients from the same category and from its "twin" so the wrong answers are believable.
+  const tw = TWIN[d.id] ? TWIN[d.id].o.i : [];
+  const sameCat = DISHES.filter(x => x !== d && x.c === d.c && x.i).flatMap(x => x.i);
+  const rest = DISHES.filter(x => x !== d && x.c !== d.c && x.i).flatMap(x => x.i);
+  const near = shuffle(tw).concat(shuffle(sameCat), shuffle(rest));
   const out = [];
   for (const ing of near) {
     if (out.length >= n) break;
@@ -664,44 +643,63 @@ const TYPES = {
   build: d => d.i && d.i.length >= 3,
   odd: d => d.i && d.i.length >= 3,
   tf: d => d.i && d.i.length >= 2,
-  price: d => typeof d.p === "number",
+  cloze: d => d.i && d.i.length >= 2,
   which: d => d.i && d.i.length >= 2,
-  vegan: d => d.v && CAT[d.c].group === "food",
+  vegan: d => !!d.v,
 };
-const TYPE_W = { name: 3, build: 3, odd: 2, tf: 2, price: 2, which: 2, vegan: 1 };
+const TYPE_W = { name: 2, build: 4, odd: 2, tf: 2, cloze: 3, which: 2, vegan: 1 };
 
 function makeQ(d, allowed) {
   if (d.fact) return factQ(d);
   const types = Object.keys(TYPES).filter(t => TYPES[t](d) && (!allowed || allowed.includes(t)));
-  if (!types.length) return null;
-  let r = Math.random() * types.reduce((s, t) => s + TYPE_W[t], 0), t = types[0];
-  for (const x of types) { r -= TYPE_W[x]; if (r <= 0) { t = x; break; } }
-  return GEN[t](d) || (t !== "price" && TYPES.price(d) ? GEN.price(d) : null);
+  for (let tries = 0; tries < 4 && types.length; tries++) {
+    let r = Math.random() * types.reduce((s, t) => s + TYPE_W[t], 0), t = types[0];
+    for (const x of types) { r -= TYPE_W[x]; if (r <= 0) { t = x; break; } }
+    const q = GEN[t](d);
+    if (q) return q;
+  }
+  return null;
 }
 function factQ(f) {
   return { kind: "opts", item: f, label: "שאלת ידע 🧠", text: f.q,
     opts: shuffle([{ t: f.a, ok: 1 }].concat(f.w.map(t => ({ t })))), answer: f.a };
 }
+const dishTag = d => "<span class='qdish'>" + esc(d.n) + "</span>";
 const GEN = {
   name(d) {
-    const pool = enabledDishes().filter(x => x.i && x.i.length >= 2);
-    const others = peers(d, pool, 3);
+    const others = peers(d, DISHES.filter(x => x.i && x.i.length >= 2), 3);
     if (others.length < 3) return null;
     return { kind: "opts", item: d, label: "איזו מנה זו? 🔎", text: "איזו מנה מכילה את כל אלה?",
       ings: d.i.join(" · "), opts: shuffle([{ t: d.n, ok: 1 }].concat(others.map(o => ({ t: o.n })))), answer: d.n };
   },
-  build(d) {
-    const real = shuffle(d.i).slice(0, 7);
-    const fake = distractors(d, Math.max(4, 11 - real.length));
+  build(d, all) {
+    const real = all ? d.i.slice() : shuffle(d.i).slice(0, 8);
+    const fake = distractors(d, Math.max(4, 12 - real.length));
     if (fake.length < 3) return null;
     return { kind: "build", item: d, label: "בני את המנה 🧩", text: d.n,
       sub: "סמני את כל מה שנמצא במנה (" + real.length + " נכונים מסתתרים כאן)",
       chips: shuffle(real.map(t => ({ t, ok: 1 })).concat(fake.map(t => ({ t })))), answer: d.i.join(", ") };
   },
+  cloze(d) {
+    const k = rnd(d.i.length), fake = distractors(d, 3);
+    if (fake.length < 3) return null;
+    const list = d.i.map((t, j) => j === k ? `<span class="chip blank">❓</span>` : `<span class="chip ro">${esc(t)}</span>`).join("");
+    return { kind: "opts", item: d, label: "השלימי את החסר ✍️", html: 1, text: "מה חסר ב" + dishTag(d) + "?",
+      pre: `<div class="chips" style="margin:10px 0 14px">${list}</div>`,
+      opts: shuffle([{ t: d.i[k], ok: 1 }].concat(fake.map(t => ({ t })))), answer: d.i[k] };
+  },
+  missing(d) {
+    const k = rnd(d.i.length), fake = distractors(d, 3);
+    if (fake.length < 3) return null;
+    const rest = shuffle(d.i.filter((_, j) => j !== k));
+    return { kind: "opts", item: d, label: "מה נעלם? 🕳️", html: 1, text: "ב" + dishTag(d) + " יש " + d.i.length + " רכיבים. אחד נעלם, מה הוא?",
+      pre: `<div class="chips" style="margin:10px 0 14px">${rest.map(t => `<span class="chip ro">${esc(t)}</span>`).join("")}</div>`,
+      opts: shuffle([{ t: d.i[k], ok: 1 }].concat(fake.map(t => ({ t })))), answer: d.i[k] };
+  },
   odd(d) {
     const real = shuffle(d.i).slice(0, 3), fake = distractors(d, 1);
     if (!fake.length) return null;
-    return { kind: "opts", item: d, label: "מי לא שייך? 🕵️‍♀️", text: "מה מהבאים לא נמצא ב" + "<span class='qdish'>" + esc(d.n) + "</span>?",
+    return { kind: "opts", item: d, label: "מי לא שייך? 🕵️‍♀️", text: "מה מהבאים לא נמצא ב" + dishTag(d) + "?",
       html: 1, opts: shuffle(real.map(t => ({ t })).concat([{ t: fake[0], ok: 1 }])), answer: fake[0] + " (לא במנה)" };
   },
   tf(d) {
@@ -709,24 +707,15 @@ const GEN = {
     const ing = truth ? pick(d.i) : distractors(d, 1)[0];
     if (!ing) return null;
     return { kind: "tf", item: d, label: "נכון או לא? ⚡", html: 1,
-      text: "יש <u>" + esc(ing) + "</u> ב" + "<span class='qdish'>" + esc(d.n) + "</span>?",
+      text: "יש <u>" + esc(ing) + "</u> ב" + dishTag(d) + "?",
       opts: [{ t: "כן ✓", ok: truth ? 1 : 0 }, { t: "לא ✗", ok: truth ? 0 : 1 }], answer: truth ? "כן, יש" : "לא, אין" };
   },
-  price(d) {
-    const near = DISHES.filter(x => x.c === d.c && typeof x.p === "number" && x.p !== d.p).map(x => x.p);
-    const set = new Set();
-    shuffle(near).forEach(p => set.size < 3 && set.add(p));
-    const deltas = shuffle([-10, -6, -4, -2, 2, 4, 6, 10]);
-    for (const k of deltas) { if (set.size >= 3) break; const v = d.p + k; if (v > 0 && v !== d.p) set.add(v); }
-    return { kind: "opts", item: d, label: "כמה זה עולה? 💰", html: 1,
-      text: "מה המחיר של <span class='qdish'>" + esc(d.n) + "</span>?",
-      opts: shuffle([{ t: d.p + "₪", ok: 1 }].concat([...set].slice(0, 3).map(p => ({ t: p + "₪" })))), answer: d.p + "₪" };
-  },
-  which(d) {
-    const pool = enabledDishes().filter(x => x.i);
+  which(d, pool) {
+    pool = pool || enabledDishes().filter(x => x.i);
     const cands = shuffle(d.i).map(ing => ({ ing, n: pool.filter(x => hasIng(x, ing)).length })).sort((a, b) => a.n - b.n);
     for (const { ing } of cands) {
-      const others = peers(d, pool, 3, x => !hasIng(x, ing));
+      let others = shuffle(pool.filter(x => x !== d && !hasIng(x, ing))).slice(0, 3);
+      if (others.length < 3) others = others.concat(peers(d, DISHES.filter(x => x.i && !others.includes(x)), 3 - others.length, x => !hasIng(x, ing)));
       if (others.length === 3)
         return { kind: "opts", item: d, label: "איפה זה מסתתר? 🗺️", html: 1,
           text: "באיזו מנה יש <u>" + esc(ing) + "</u>?", opts: shuffle([{ t: d.n, ok: 1 }].concat(others.map(o => ({ t: o.n })))), answer: d.n };
@@ -734,7 +723,7 @@ const GEN = {
     return null;
   },
   vegan(d) {
-    const others = peers(d, enabledDishes().filter(x => CAT[x.c].group === "food"), 3, x => !x.v);
+    const others = peers(d, enabledDishes(), 3, x => !x.v);
     if (others.length < 3) return null;
     return { kind: "opts", item: d, label: "עלה ירוק 🌿", text: "איזו מנה מסומנת בתפריט כטבעונית?",
       opts: shuffle([{ t: d.n, ok: 1 }].concat(others.map(o => ({ t: o.n })))), answer: d.n };
@@ -751,18 +740,181 @@ function nextQ(allowed, avoid) {
   return null;
 }
 
+// ================= learning path =================
+const LESSONS = [];
+CATS.forEach(c => {
+  const ds = DISHES.filter(d => d.c === c.id && d.i && d.i.length >= 2);
+  const chunks = [];
+  for (let k = 0; k < ds.length; k += 3) chunks.push(ds.slice(k, k + 3));
+  if (chunks.length > 1 && chunks[chunks.length - 1].length === 1) chunks[chunks.length - 2].push(...chunks.pop());
+  chunks.forEach((ch, k) => LESSONS.push({ id: c.id + "-" + k, c: c.id, kind: "learn", ds: ch, title: "שיעור " + (k + 1) }));
+  LESSONS.push({ id: c.id + "-r", c: c.id, kind: "review", ds, title: "חזרה על כל ה" + c.name, facts: FACTS2.filter(f => f.c === c.id) });
+});
+const nextLesson = () => LESSONS.find(l => !S.lessons[l.id]) || null;
+const lessonsDone = () => LESSONS.filter(l => S.lessons[l.id]).length;
+
+function path() {
+  const nl = nextLesson();
+  $app.innerHTML = hdr("מסלול לימוד") + `<p class="sub">כל שיעור מלמד 3–4 מנות: קודם מכירים כל מנה, אחר כך משלימים חסרים, ובסוף בונים אותה מאפס. טעות? המנה חוזרת עד שהיא יושבת.</p>
+  <div class="prog" style="margin-bottom:6px"><i style="width:${lessonsDone() / LESSONS.length * 100}%"></i></div>
+  <p class="sub" style="font-size:13px">${lessonsDone()} מתוך ${LESSONS.length} שיעורים</p>
+  ${CATS.map(c => `<div class="sec">${c.emoji} ${c.name}${c.note ? `<small>${esc(c.note)}</small>` : ""}</div>
+    <div class="path">${LESSONS.filter(l => l.c === c.id).map(l => {
+      const st = S.lessons[l.id] || 0, isNext = nl && nl.id === l.id;
+      return `<button class="node ${st ? "done" : ""} ${isNext ? "next" : ""} ${l.kind}" onclick="go('lesson','${l.id}')">
+        <span class="nic">${st ? "⭐".repeat(st) : l.kind === "review" ? "🏁" : isNext ? "▶️" : "📘"}</span>
+        <span class="t"><b>${l.kind === "review" ? l.title : l.title + ": " + l.ds.map(d => esc(d.n)).join(" · ")}</b>
+        <small>${l.kind === "review" ? l.ds.length + " מנות, בלי רמזים" : l.ds.length + " מנות חדשות"}</small></span></button>`;
+    }).join("")}</div>`).join("")}`;
+  const n = document.querySelector(".node.next");
+  if (n) setTimeout(() => n.scrollIntoView({ block: "center", behavior: "smooth" }), 50);
+}
+
+let LZ = null;
+function lesson(id) {
+  const l = LESSONS.find(x => x.id === id);
+  const steps = [];
+  if (l.kind === "learn") {
+    l.ds.forEach(d => {
+      steps.push({ t: "intro", d });
+      steps.push({ t: "cloze", d });
+      steps.push({ t: d.i.length >= 3 ? "missing" : "cloze", d });
+      if (d.i.length >= 3) steps.push({ t: "build", d });
+    });
+    const mixed = [];
+    l.ds.forEach(d => {
+      if (l.ds.length > 1) mixed.push({ t: "which", d });
+      mixed.push({ t: d.i.length >= 3 ? "build" : "cloze", d });
+    });
+    steps.push({ t: "banner", text: "עכשיו מערבבים! 🌀", sub: "כל המנות של השיעור, בלי הכרטיס מול העיניים." });
+    steps.push(...shuffle(mixed));
+  } else {
+    steps.push({ t: "banner", text: "חזרה: " + CAT[l.c].name + " 🏁", sub: "בונים כל מנה מהזיכרון. מה שלא יושב, חוזר בסוף." });
+    const mixed = l.ds.map(d => ({ t: d.i.length >= 3 ? "build" : "cloze", d }));
+    shuffle(l.ds).slice(0, Math.ceil(l.ds.length / 2)).forEach(d => mixed.push({ t: "which", d }));
+    l.facts.forEach(f => mixed.push({ t: "fact", d: f }));
+    steps.push(...shuffle(mixed));
+  }
+  LZ = { l, steps, k: 0, miss: {}, mistakes: 0, xp: 0 };
+  lzStep();
+}
+function lzStep() {
+  const L = LZ;
+  if (L.k >= L.steps.length) return lzFinish();
+  const st = L.steps[L.k], d = st.d;
+  const total = L.steps.length;
+  const head = `<div class="top"><button class="back" onclick="go('path')">→</button><b>${L.l.kind === "review" ? "חזרה" : L.l.title} · ${CAT[L.l.c].emoji}</b><span class="pill">❤️ ${Math.max(0, 3 - L.mistakes)}</span></div>
+    <div class="qhead"><div class="prog"><i style="width:${L.k / total * 100}%"></i></div></div>`;
+  if (st.t === "banner") {
+    $app.innerHTML = head + `<div class="qcard center"><div style="font-size:54px">🎯</div><h2>${st.text}</h2><p class="sub">${st.sub}</p><button class="btn" onclick="LZ.k++;lzStep()">יאללה ←</button></div>`;
+    return;
+  }
+  if (st.t === "intro") {
+    const c = CAT[d.c];
+    $app.innerHTML = head + `<div class="qcard"><div class="qtype">מנה חדשה 👋 קראי לאט, תגידי בקול</div>
+      <div class="dishname"><span>${esc(d.n)}</span></div>
+      <div class="tags">${tagsHTML(d)}</div>
+      <p class="sub" style="margin:10px 0 6px">${d.i.length} רכיבים, לפי הסדר בתפריט:</p>
+      ${ingChips(d)}
+      ${aidsHTML(d)}
+      ${(d.x || []).map(x => `<div class="note">${esc(x)}</div>`).join("")}
+      ${c.note ? `<div class="note teal">כל ה${c.name}: ${esc(c.note)}</div>` : ""}
+      <button class="btn" onclick="LZ.k++;lzStep()">הבנתי, בואי נתרגל ←</button></div>`;
+    return;
+  }
+  let q = null;
+  if (st.t === "fact") q = factQ(d);
+  else if (st.t === "which") q = GEN.which(d, L.l.ds.length > 1 ? L.l.ds : null) || GEN.cloze(d);
+  else if (st.t === "build") q = GEN.build(d, true);
+  else q = GEN[st.t](d) || GEN.cloze(d);
+  if (!q) { L.k++; return lzStep(); }
+  L.q = q; L.answered = false;
+  $app.innerHTML = head + qcardHTML(q, "lzAnswer", "lzBuild");
+}
+function lzAnswer(k) { if (LZ.answered) return; LZ.answered = true; markOpts(LZ.q, k); lzResolve(!!LZ.q.opts[k].ok, document.querySelectorAll(".opt")[k]); }
+function lzBuild() { if (LZ.answered) return; LZ.answered = true; const r = markBuild(LZ.q); lzResolve(r.ok, document.getElementById("chips"), r.extra); }
+function lzResolve(ok, el, extra = "") {
+  const L = LZ, st = L.steps[L.k], q = L.q;
+  if (ok) { L.xp += 8; addXP(8, el); beep("ok"); }
+  else {
+    beep("bad"); L.mistakes++; L.miss[q.item.id] = 1;
+    // Wrong → see the dish again, then the same kind of exercise comes back later.
+    if (!q.item.fact && L.l.kind === "learn") L.steps.push({ t: "intro", d: q.item, again: 1 });
+    L.steps.push({ t: st.t === "intro" ? "cloze" : st.t, d: st.d });
+  }
+  const d = q.item;
+  const learn = d.fact ? `<div class="mini"><b>התשובה:</b> ${esc(d.a)}</div>` : `<div class="mini"><b>${esc(d.n)}:</b>${ingChips(d)}</div>`;
+  document.getElementById("fb").innerHTML = `<div class="fb ${ok ? "ok" : "no"}"><div class="t">${ok ? pick(PRAISE) : pick(OOPS)}</div>${extra}${!ok && q.kind !== "build" ? `<div><b>התשובה הנכונה:</b> ${esc(q.answer)}</div>` : ""}${ok && q.kind !== "build" ? "" : learn}${!ok ? `<div style="font-size:13px;margin-top:6px">🔁 המנה הזו תחזור עוד בשיעור</div>` : ""}</div>
+    <button class="btn ${ok ? "" : "gold"}" id="nx" onclick="LZ.k++;lzStep()">המשך ←</button>`;
+  document.getElementById("nx").scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+function lzFinish() {
+  const L = LZ, stars = L.mistakes === 0 ? 3 : L.mistakes <= 2 ? 2 : 1;
+  S.lessons[L.l.id] = Math.max(S.lessons[L.l.id] || 0, stars);
+  L.l.ds.forEach(d => { if (!L.miss[d.id]) S.m[d.id] = Math.min(MAXM, mastery(d.id) + (L.l.kind === "review" ? 2 : 1)); });
+  (L.l.facts || []).forEach(f => { if (!L.miss[f.id]) S.m[f.id] = Math.min(MAXM, mastery(f.id) + 1); });
+  addXP(20); save(); confetti(140); beep("win");
+  const nl = nextLesson();
+  $app.innerHTML = hdr("שיעור הושלם") + `<div class="qcard center"><div style="font-size:52px;letter-spacing:6px">${"⭐".repeat(stars)}${"☆".repeat(3 - stars)}</div>
+    <h2>${stars === 3 ? "מושלם! בלי אף טעות 👑" : stars === 2 ? "יפה מאוד! 💪" : "סיימת! כדאי לעשות שוב 🔁"}</h2>
+    <p class="sub">${L.l.ds.map(d => esc(d.n)).join(" · ")}</p>
+    <p class="sub">+${L.xp + 20} XP · טעויות: ${L.mistakes}</p>
+    ${nl ? `<button class="btn gold" onclick="go('lesson','${nl.id}')">לשיעור הבא ←</button>` : `<p class="sub">סיימת את כל המסלול! 🎓 עכשיו סימולציית מבחן.</p><button class="btn gold" onclick="go('quiz',{mode:'exam'})">סימולציית מבחן 📝</button>`}
+    <button class="btn ghost" onclick="go('lesson','${L.l.id}')">לעשות שוב את השיעור</button>
+    <button class="btn ghost" onclick="go('path')">חזרה למסלול</button></div>`;
+  LZ = null;
+}
+
+// ================= shared question UI =================
+function qcardHTML(q, onAns, onBuild) {
+  const text = q.html ? q.text : esc(q.text);
+  let body;
+  if (q.kind === "build") {
+    body = `<div class="qsub">${esc(q.sub)}</div><div class="chips" id="chips">${q.chips.map((c, k) => `<button class="chip" data-k="${k}" onclick="this.classList.toggle('on')">${esc(c.t)}</button>`).join("")}</div>
+      <button class="btn" id="chk" onclick="${onBuild}()">בדיקה</button>`;
+  } else {
+    body = (q.ings ? `<div class="ings">${esc(q.ings)}</div>` : "") + (q.pre || "") +
+      `<div class="${q.kind === "tf" ? "tf" : "opts"}">${q.opts.map((o, k) => `<button class="opt" data-k="${k}" onclick="${onAns}(${k})">${esc(o.t)}</button>`).join("")}</div>`;
+  }
+  return `<div class="qcard"><div class="qtype">${q.label}</div>
+  <div class="qtext">${q.kind === "build" ? `<span class="qdish" style="font-size:22px">${esc(q.text)}</span>` : text}</div>${body}<div id="fb"></div></div>`;
+}
+function markOpts(q, k) {
+  document.querySelectorAll(".opt").forEach((b, j) => {
+    b.disabled = true;
+    if (q.opts[j].ok) b.classList.add("good"); else if (j === k) b.classList.add("bad"); else b.classList.add("dim");
+  });
+}
+function markBuild(q) {
+  let hit = 0, wrong = 0, miss = 0;
+  document.querySelectorAll("#chips .chip").forEach(b => {
+    const c = q.chips[+b.dataset.k], on = b.classList.contains("on");
+    b.classList.remove("on"); b.disabled = true;
+    if (c.ok && on) { b.classList.add("good"); hit++; }
+    else if (c.ok) { b.classList.add("miss"); miss++; }
+    else if (on) { b.classList.add("bad"); wrong++; }
+  });
+  document.getElementById("chk").remove();
+  const ok = !wrong && !miss;
+  const extra = ok ? "" : `<div style="font-size:14px;margin-top:4px">✓ ${hit} נכונים${miss ? " · ⚠️ פספסת " + miss + " (בכתום)" : ""}${wrong ? " · ✗ " + wrong + " לא שייכים (באדום)" : ""}</div>`;
+  return { ok, hit, wrong, miss, extra };
+}
+const PRAISE = ["מושלם! 🎉", "יאללה! 🔥", "בדיוק! ✨", "את תותחית! 💪", "נכון מאוד! 👏", "שף מחבק אותך 👨‍🍳", "בול! 🎯"];
+const OOPS = ["כמעט… 🤏", "לא נורא, עכשיו תזכרי 💡", "אופס 🙈", "זה יחזור אלייך עוד מעט 🔁"];
+
 // ================= views =================
-let view = "home", stopTimer = null;
+let stopTimer = null;
 function go(v, arg) {
   if (stopTimer) { stopTimer(); stopTimer = null; }
-  view = v; window.scrollTo(0, 0);
-  ({ home, study, deck, menu, quiz, settings })[v](arg);
+  window.scrollTo(0, 0);
+  ({ home, study, deck, menu, quiz, settings, path, lesson })[v](arg);
 }
 const hdr = (title, right = "") => `<div class="top"><button class="back" onclick="go('home')">→</button><b style="font-size:18px">${title}</b><div>${right}</div></div>`;
+const tagsHTML = d => `${d.v ? '<span class="tag">🌿 טבעוני</span>' : ""}${d.h ? '<span class="tag h">🌶️ חריף</span>' : ""}${d.b ? '<span class="tag b">☀️ גם בתפריט בוקר</span>' : ""}<span class="tag" style="background:#eef4f6;color:var(--teal)">${CAT[d.c].emoji} ${CAT[d.c].name}</span>`;
 
 function home() {
   touchDay();
-  const L = level(), tp = totalPct();
+  const L = level(), tp = totalPct(), nl = nextLesson();
   const acc = S.answered ? Math.round(S.correct / S.answered * 100) : 0;
   const weakest = CATS.filter(c => S.cats.includes(c.id)).map(c => [c, catPct(c.id)]).sort((a, b) => a[1] - b[1])[0];
   $app.innerHTML = `
@@ -776,47 +928,52 @@ function home() {
     <div style="font-size:12px;opacity:.8;margin-top:4px">${S.xp} / ${L.next} XP</div>
     <div class="row">
       <div class="stat"><b>${tp}%</b>שליטה בתפריט</div>
+      <div class="stat"><b>${lessonsDone()}/${LESSONS.length}</b>שיעורים</div>
       <div class="stat"><b>${acc}%</b>דיוק</div>
       <div class="stat"><b>${S.best.exam}%</b>מבחן הכי טוב</div>
-      <div class="stat"><b>${S.best.sprint}</b>שיא ספרינט</div>
     </div>
   </div>
+  <button class="learnbtn" onclick="${nl ? `go('lesson','${nl.id}')` : `go('path')`}">
+    <div class="ic">📚</div><div style="flex:1"><small>${nl ? (lessonsDone() ? "להמשיך מאיפה שעצרת" : "מתחילים מכאן") : "סיימת את כל המסלול 🎓"}</small>
+    <b>${nl ? `${CAT[nl.c].emoji} ${CAT[nl.c].name} · ${nl.kind === "review" ? "חזרה" : nl.title}` : "מסלול לימוד"}</b>
+    <small>${nl ? (nl.kind === "review" ? "כל המנות בקטגוריה, מהזיכרון" : nl.ds.map(d => esc(d.n)).join(" · ")) : "אפשר לחזור לכל שיעור"}</small></div><div class="go">←</div></button>
+  <button class="cat" style="margin-top:10px" onclick="go('path')"><span class="em">🗺️</span><span class="t"><b>כל המסלול</b><small>${lessonsDone()} מתוך ${LESSONS.length} שיעורים</small><div class="bar"><i style="width:${lessonsDone() / LESSONS.length * 100}%"></i></div></span></button>
   <div class="grid">
-    <button class="mode wide" onclick="go('quiz',{mode:'practice'})"><div class="ic">🎯</div><div><b>אימון חכם</b><br><small>שאלות מעורבות. מה שקשה לך חוזר יותר, ומה שכבר יודעת פחות.</small></div></button>
-    <button class="mode" onclick="go('study')"><div class="ic">📖</div><b>כרטיסיות</b><small>לומדים מנה-מנה. הופכים, נזכרים, מסמנים.</small></button>
-    <button class="mode" onclick="go('quiz',{mode:'exam'})"><div class="ic">📝</div><b>סימולציית מבחן</b><small>25 שאלות, ציון בסוף, וחזרה על הטעויות.</small></button>
-    <button class="mode" onclick="go('quiz',{mode:'sprint'})"><div class="ic">⚡</div><b>ספרינט 60 שניות</b><small>כמה תספיקי? כל טעות עולה 3 שניות.</small></button>
+    <button class="mode" onclick="go('study')"><div class="ic">🃏</div><b>כרטיסיות</b><small>שם המנה, נזכרים, וחושפים רכיב-רכיב.</small></button>
     <button class="mode" onclick="go('quiz',{mode:'build'})"><div class="ic">🧩</div><b>בני את המנה</b><small>הכי קרוב למבחן: לזכור כל רכיב.</small></button>
-    <button class="mode" onclick="go('menu')"><div class="ic">🔍</div><b>התפריט המלא</b><small>חיפוש, וכמה את שולטת בכל מנה.</small></button>
-    <button class="mode" onclick="go('settings')"><div class="ic">⚙️</div><b>הגדרות</b><small>בחירת קטגוריות, צלילים, איפוס.</small></button>
+    <button class="mode" onclick="go('quiz',{mode:'practice'})"><div class="ic">🎯</div><b>אימון חכם</b><small>שאלות מעורבות. מה שקשה חוזר יותר.</small></button>
+    <button class="mode" onclick="go('quiz',{mode:'exam'})"><div class="ic">📝</div><b>סימולציית מבחן</b><small>25 שאלות, ציון, וחזרה על הטעויות.</small></button>
+    <button class="mode" onclick="go('quiz',{mode:'sprint'})"><div class="ic">⚡</div><b>ספרינט 60 שניות</b><small>כמה תספיקי? טעות = מינוס 3 שניות.</small></button>
+    <button class="mode" onclick="go('menu')"><div class="ic">🔍</div><b>התפריט המלא</b><small>חיפוש מנה או רכיב.</small></button>
   </div>
   ${weakest && S.answered > 5 ? `<h2>כדאי לחזק 💪</h2>
   <button class="cat" onclick="go('quiz',{mode:'practice',only:'${weakest[0].id}'})"><span class="em">${weakest[0].emoji}</span><span class="t"><b>${weakest[0].name}</b><small>אימון ממוקד בקטגוריה</small><div class="bar"><i style="width:${weakest[1]}%"></i></div></span><span class="pct">${weakest[1]}%</span></button>` : ""}
   <h2>התקדמות לפי קטגוריה</h2>
   <div class="catlist">${CATS.map(c => `<button class="cat" onclick="go('deck','${c.id}')"><span class="em">${c.emoji}</span><span class="t"><b>${c.name}</b><div class="bar"><i style="width:${catPct(c.id)}%"></i></div></span><span class="pct">${catPct(c.id)}%</span></button>`).join("")}</div>
+  <button class="btn ghost" style="margin-top:18px" onclick="go('settings')">⚙️ הגדרות</button>
   <div class="foot">ההתקדמות נשמרת במכשיר הזה · בהצלחה במבחן! 🍀</div>`;
 }
 
 function study() {
-  $app.innerHTML = hdr("כרטיסיות") + `<p class="sub">בחרי קטגוריה. כל כרטיס: קודם נסי להיזכר בכל הרכיבים, ואז הפכי.</p>
+  $app.innerHTML = hdr("כרטיסיות") + `<p class="sub">רואים רק את שם המנה. אומרים בקול את כל הרכיבים, ואז חושפים אחד-אחד ובודקים את עצמך.</p>
   <button class="cat" style="margin-bottom:10px;background:linear-gradient(135deg,#fff6e3,#ffe9bd)" onclick="go('deck','weak')"><span class="em">🎯</span><span class="t"><b>המנות שהכי קשות לי</b><small>15 הכרטיסים עם הכי פחות שליטה</small></span></button>
-  <div class="catlist">${CATS.map(c => `<button class="cat" onclick="go('deck','${c.id}')"><span class="em">${c.emoji}</span><span class="t"><b>${c.name}</b><small>${DISHES.filter(d => d.c === c.id).length} פריטים${c.note ? " · " + c.note : ""}</small><div class="bar"><i style="width:${catPct(c.id)}%"></i></div></span><span class="pct">${catPct(c.id)}%</span></button>`).join("")}</div>`;
+  <div class="catlist">${CATS.map(c => `<button class="cat" onclick="go('deck','${c.id}')"><span class="em">${c.emoji}</span><span class="t"><b>${c.name}</b><small>${DISHES.filter(d => d.c === c.id || (c.id === "breakfast" && d.b)).length} מנות${c.note ? " · " + c.note : ""}</small><div class="bar"><i style="width:${catPct(c.id)}%"></i></div></span><span class="pct">${catPct(c.id)}%</span></button>`).join("")}</div>`;
 }
 
 function dishCard(d, opts = {}) {
   const c = CAT[d.c];
-  return `<div class="dishname"><span>${esc(d.n)}</span><span class="price">${priceTxt(d.p)}</span></div>
-  <div class="tags">${d.v ? '<span class="tag">🌿 טבעוני</span>' : ""}${d.h ? '<span class="tag h">🌶️ חריף</span>' : ""}${d.b ? '<span class="tag b">☀️ גם בתפריט בוקר</span>' : ""}<span class="tag" style="background:#eef4f6;color:var(--teal)">${c.emoji} ${c.name}</span></div>
+  return `<div class="dishname"><span>${esc(d.n)}</span></div>
+  <div class="tags">${tagsHTML(d)}</div>
   ${d.d ? `<div class="desc">${esc(d.d)}</div>` : ""}
-  ${opts.chips && d.i ? `<div class="chips" style="margin:6px 0 4px">${d.i.map(t => `<span class="chip ro">${esc(t)}</span>`).join("")}</div>` : ""}
+  ${opts.aids && d.i ? aidsHTML(d) : ""}
   ${(d.x || []).map(x => `<div class="note">${esc(x)}</div>`).join("")}
-  ${c.note ? `<div class="note" style="border-color:var(--teal);background:#eef4f6">כל ה${c.name}: ${esc(c.note)}</div>` : ""}`;
+  ${c.note && !opts.noCat ? `<div class="note teal">כל ה${c.name}: ${esc(c.note)}</div>` : ""}`;
 }
 
 let D = null;
 function deck(cid) {
   let items;
-  if (cid === "weak") items = DISHES.filter(d => S.cats.includes(d.c) && (d.i || d.d)).sort((a, b) => mastery(a.id) - mastery(b.id) || Math.random() - .5).slice(0, 15);
+  if (cid === "weak") items = DISHES.filter(d => S.cats.includes(d.c)).sort((a, b) => mastery(a.id) - mastery(b.id) || Math.random() - .5).slice(0, 15);
   else items = DISHES.filter(d => d.c === cid || (cid === "breakfast" && d.b));
   D = { cid, items: shuffle(items), k: 0, known: 0 };
   drawCard();
@@ -825,7 +982,7 @@ function drawCard() {
   const title = D.cid === "weak" ? "הכי קשות לי" : CAT[D.cid].name;
   if (D.k >= D.items.length) {
     confetti(80); beep("win");
-    $app.innerHTML = hdr(title) + `<div class="qcard center"><div style="font-size:60px">🎉</div><h2>סיימת את החבילה!</h2><p class="sub">ידעת ${D.known} מתוך ${D.items.length}</p>
+    $app.innerHTML = hdr(title) + `<div class="qcard center"><div style="font-size:60px">🎉</div><h2>סיימת את החבילה!</h2><p class="sub">ידעת ${D.known} כרטיסים בפעם הראשונה</p>
     <button class="btn" onclick="deck('${D.cid}')">עוד סיבוב (מעורבב)</button>
     ${D.cid !== "weak" ? `<button class="btn gold" onclick="go('quiz',{mode:'practice',only:'${D.cid}'})">בחני אותי על ${CAT[D.cid].name} 🎯</button>` : ""}
     <button class="btn ghost" onclick="go('study')">חזרה לקטגוריות</button></div>`;
@@ -834,21 +991,29 @@ function drawCard() {
   const d = D.items[D.k], m = mastery(d.id);
   $app.innerHTML = hdr(title, `<span class="pill">${D.k + 1}/${D.items.length}</span>`) + `
   <div class="prog" style="margin-bottom:12px"><i style="width:${D.k / D.items.length * 100}%"></i></div>
-  <div class="flip"><div class="fc" id="fc" onclick="this.classList.toggle('flipped')">
-    <div class="face front"><div style="font-size:42px">${CAT[d.c].emoji}</div><div class="nm">${esc(d.n)}</div>
-      <div class="hint">${d.i ? "מה יש במנה? נסי למנות " + d.i.length + " רכיבים בראש" : "כמה זה עולה?"}<br>👆 הקישי כדי להפוך</div>
-      <div class="mast">שליטה: <span class="dots">${"●".repeat(m)}${"○".repeat(MAXM - m)}</span></div></div>
-    <div class="face rear">${dishCard(d, { chips: true })}</div>
-  </div></div>
-  <div class="row2" style="margin-top:14px">
+  <div class="fc" id="fc">
+    <div class="face front" onclick="flipCard()"><div style="font-size:42px">${CAT[d.c].emoji}</div><div class="nm">${esc(d.n)}</div>
+      <div class="hint">אמרי בקול את כל ${d.i.length} הרכיבים<br>👆 הקישי כשאת מוכנה</div>
+      <div class="mast">שליטה: ${dots(m)}</div></div>
+    <div class="face rear">
+      <div class="dishname"><span>${esc(d.n)}</span></div>
+      <p class="sub" style="margin:8px 0">הקישי על כל רכיב כדי לחשוף אותו. כמה ידעת?</p>
+      <div class="chips num" id="hid">${d.i.map((t, k) => `<button class="chip hidden" onclick="this.classList.remove('hidden');this.disabled=true;revealed()"><i>${k + 1}</i><span>${esc(t)}</span></button>`).join("")}</div>
+      <button class="btn ghost" style="margin-top:10px" onclick="document.querySelectorAll('#hid .hidden').forEach(b=>{b.classList.remove('hidden');b.disabled=true});revealed()">גלי הכל</button>
+      <div id="more" style="display:none">${aidsHTML(d)}${(d.x || []).map(x => `<div class="note">${esc(x)}</div>`).join("")}</div>
+    </div>
+  </div>
+  <div class="row2" style="margin-top:14px" id="ans">
     <button class="btn ghost" style="margin:0;color:var(--bad)" onclick="cardAns(0)">😅 עוד לא</button>
-    <button class="btn" style="margin:0;background:var(--ok)" onclick="cardAns(1)">ידעתי! ✓</button>
+    <button class="btn" style="margin:0;background:var(--ok)" onclick="cardAns(1)">ידעתי הכל ✓</button>
   </div>`;
 }
+function flipCard() { document.getElementById("fc").classList.add("flipped"); }
+function revealed() { if (!document.querySelector("#hid .hidden")) document.getElementById("more").style.display = "block"; }
 function cardAns(ok) {
   const d = D.items[D.k];
   S.m[d.id] = ok ? Math.min(MAXM, mastery(d.id) + 1) : Math.max(0, mastery(d.id) - 1);
-  if (ok) { D.known++; addXP(3); beep("ok"); } else { beep("tick"); D.items.push(d); }
+  if (ok) { D.known++; addXP(3); beep("ok"); } else { beep("tick"); D.items.splice(Math.min(D.items.length, D.k + 4), 0, d); }
   save(); D.k++; drawCard();
 }
 
@@ -863,21 +1028,19 @@ function menu(q = "") {
       const ds = DISHES.filter(d => (d.c === c.id || (c.id === "breakfast" && d.b)) && match(d));
       if (!ds.length) return "";
       return `<div class="sec">${c.emoji} ${c.name}${c.note ? `<small>${esc(c.note)}</small>` : ""}</div>` +
-        ds.map(d => `<div class="dish">${dishCard(d).replace(/<div class="note" style="border-color:var\(--teal\)[^]*?<\/div>/, "")}<div class="mast">שליטה: <span class="dots">${"●".repeat(mastery(d.id))}${"○".repeat(MAXM - mastery(d.id))}</span></div></div>`).join("");
+        ds.map(d => `<div class="dish">${dishCard(d, { noCat: 1 })}<div class="mast">שליטה: ${dots(mastery(d.id))}</div></div>`).join("");
     }).join("") || `<p class="sub center">לא נמצא כלום 🤷‍♀️</p>`;
   };
   sq.oninput = draw; draw();
 }
 
 function settings() {
-  const food = CATS.filter(c => c.group === "food"), drinks = CATS.filter(c => c.group === "drinks");
   const chip = c => `<button class="chip ${S.cats.includes(c.id) ? "on" : ""}" onclick="togCat('${c.id}')">${c.emoji} ${c.name}</button>`;
   $app.innerHTML = hdr("הגדרות") + `
   <h2>על מה לשאול אותי?</h2>
   <p class="sub">האימון, המבחן והספרינט ישאלו רק על הקטגוריות המסומנות.</p>
-  <div class="sub" style="font-weight:800">אוכל</div><div class="chips">${food.map(chip).join("")}</div>
-  <div class="sub" style="font-weight:800;margin-top:14px">שתיה ומאפים</div><div class="chips">${drinks.map(chip).join("")}</div>
-  <div class="row2" style="margin-top:12px"><button class="btn ghost" style="margin:0" onclick="setCats('food')">רק אוכל</button><button class="btn ghost" style="margin:0" onclick="setCats('all')">הכל</button></div>
+  <div class="chips">${CATS.map(chip).join("")}</div>
+  <button class="btn ghost" onclick="S.cats=CATS.map(c=>c.id);save();settings()">סמני הכל</button>
   <h2>כללי</h2>
   <div class="toggle" onclick="S.sound=!S.sound;save();settings()"><span>🔊 צלילים ורטט</span><span class="sw ${S.sound ? "on" : ""}"></span></div>
   <button class="btn ghost" style="color:var(--bad)" onclick="if(confirm('לאפס את כל ההתקדמות?')){try{localStorage.removeItem(LS)}catch(e){}location.reload()}">איפוס כל ההתקדמות</button>`;
@@ -887,14 +1050,13 @@ function togCat(id) {
   if (k >= 0) { if (S.cats.length === 1) return toast("צריך לפחות קטגוריה אחת"); S.cats.splice(k, 1); } else S.cats.push(id);
   save(); settings();
 }
-function setCats(w) { S.cats = CATS.filter(c => w === "all" || c.group === "food").map(c => c.id); save(); settings(); }
 
 // ================= quiz engine =================
 let Q = null;
 function quiz(cfg) {
   const savedCats = S.cats;
   if (cfg.only) S.cats = [cfg.only];
-  const allowed = { sprint: ["name", "tf", "price", "odd", "which", "fact"], build: ["build"] }[cfg.mode] || null;
+  const allowed = { sprint: ["name", "tf", "odd", "which", "cloze", "fact"], build: ["build"] }[cfg.mode] || null;
   Q = { cfg, allowed, n: 0, right: 0, combo: 0, bestCombo: 0, xp: 0, recent: [], log: [], total: cfg.mode === "exam" ? 25 : 0, time: 60, restoreCats: cfg.only ? savedCats : null };
   if (cfg.mode === "sprint") {
     const t0 = Date.now(); let pen = 0;
@@ -912,6 +1074,7 @@ function quiz(cfg) {
   nextQuestion();
 }
 function nextQuestion() {
+  if (!Q) return;
   if (Q.total && Q.n >= Q.total) return finish();
   const q = nextQ(Q.allowed, Q.recent);
   if (!q) { $app.innerHTML = hdr("אופס") + `<p class="sub">אין מספיק שאלות לקטגוריות שנבחרו. נסי להוסיף קטגוריות בהגדרות.</p>`; return; }
@@ -922,45 +1085,19 @@ function nextQuestion() {
     `<span class="combo ${Q.combo >= 5 ? "hot" : ""}">${Q.combo >= 2 ? "🔥x" + Q.combo : ""}</span>`;
   const title = { practice: Q.cfg.only ? CAT[Q.cfg.only].name : "אימון חכם", exam: "סימולציית מבחן", sprint: "ספרינט ⚡", build: "בני את המנה" }[mode];
   const progW = Q.total ? Q.n / Q.total * 100 : mode === "sprint" ? Q.time / 60 * 100 : (Q.combo % 10) * 10;
-  const text = q.html ? q.text : esc(q.text);
-  let body = "";
-  if (q.kind === "build") {
-    body = `<div class="qsub">${esc(q.sub)}</div><div class="chips" id="chips">${q.chips.map((c, k) => `<button class="chip" data-k="${k}" onclick="this.classList.toggle('on')">${esc(c.t)}</button>`).join("")}</div>
-      <button class="btn" id="chk" onclick="checkBuild()">בדיקה</button>`;
-  } else {
-    body = (q.ings ? `<div class="ings">${esc(q.ings)}</div>` : "") +
-      `<div class="${q.kind === "tf" ? "tf" : "opts"}">${q.opts.map((o, k) => `<button class="opt" data-k="${k}" onclick="answer(${k})">${esc(o.t)}</button>`).join("")}</div>`;
-  }
   $app.innerHTML = `<div class="top"><button class="back" onclick="${mode === "practice" || mode === "build" ? "finish()" : "go('home')"}">→</button><b>${title}</b><div style="display:flex;gap:6px;align-items:center">${right}<span class="pill">${Q.total ? Q.n + 1 + "/" + Q.total : "✓ " + Q.right}</span></div></div>
-  <div class="qhead"><div class="prog"><i style="width:${progW}%"></i></div></div>
-  <div class="qcard"><div class="qtype">${q.label}</div>
-  <div class="qtext">${q.kind === "build" ? `<span class="qdish" style="font-size:22px">${esc(q.text)}</span>` : text}</div>${body}<div id="fb"></div></div>`;
+  <div class="qhead"><div class="prog"><i style="width:${progW}%"></i></div></div>` + qcardHTML(q, "answer", "checkBuild");
 }
 function answer(k) {
   if (Q.answered) return; Q.answered = true;
-  const q = Q.cur, ok = !!q.opts[k].ok;
-  document.querySelectorAll(".opt").forEach((b, j) => {
-    if (q.opts[j].ok) b.classList.add("good"); else if (j === k) b.classList.add("bad"); else b.classList.add("dim");
-  });
-  resolve(ok, document.querySelectorAll(".opt")[k], q.opts[k].t);
+  markOpts(Q.cur, k);
+  resolve(!!Q.cur.opts[k].ok, document.querySelectorAll(".opt")[k], Q.cur.opts[k].t);
 }
 function checkBuild() {
   if (Q.answered) return; Q.answered = true;
-  const q = Q.cur; let hit = 0, wrong = 0, miss = 0;
-  document.querySelectorAll("#chips .chip").forEach(b => {
-    const c = q.chips[+b.dataset.k], on = b.classList.contains("on");
-    b.classList.remove("on"); b.disabled = true;
-    if (c.ok && on) { b.classList.add("good"); hit++; }
-    else if (c.ok) { b.classList.add("miss"); miss++; }
-    else if (on) { b.classList.add("bad"); wrong++; }
-  });
-  document.getElementById("chk").remove();
-  const ok = !wrong && !miss;
-  const extra = ok ? "" : `<div style="font-size:14px;margin-top:4px">✓ ${hit} נכונים · ${miss ? "⚠️ פספסת " + miss + " (מסומן בכתום)" : ""}${miss && wrong ? " · " : ""}${wrong ? "✗ " + wrong + " לא שייכים" : ""}</div>`;
-  resolve(ok, document.getElementById("chips"), ok ? "" : `פספוסים: ${miss}, מיותרים: ${wrong}`, extra, hit && !ok ? Math.max(2, hit * 2 - wrong * 2) : 0);
+  const r = markBuild(Q.cur);
+  resolve(r.ok, document.getElementById("chips"), r.ok ? "" : `פספוסים: ${r.miss}, מיותרים: ${r.wrong}`, r.extra, r.hit && !r.ok ? Math.max(2, r.hit * 2 - r.wrong * 2) : 0);
 }
-const PRAISE = ["מושלם! 🎉", "יאללה! 🔥", "בדיוק! ✨", "את תותחית! 💪", "נכון מאוד! 👏", "שף מחבק אותך 👨‍🍳", "בול! 🎯"];
-const OOPS = ["כמעט… 🤏", "לא נורא, עכשיו תזכרי 💡", "אופס 🙈", "זה יחזור אלייך עוד מעט 🔁"];
 function resolve(ok, el, yourAns, extra = "", partialXP = 0) {
   const q = Q.cur, mode = Q.cfg.mode;
   bump(q.item.id, ok); Q.n++;
@@ -978,7 +1115,7 @@ function resolve(ok, el, yourAns, extra = "", partialXP = 0) {
   if (mode === "sprint") return setTimeout(() => Q && Q.cfg.mode === "sprint" && Q.time > 0 && nextQuestion(), ok ? 350 : 900);
   if (mode === "exam") return setTimeout(() => Q && nextQuestion(), 650);
   const d = q.item;
-  const learn = d.fact ? `<div class="mini"><b>התשובה:</b> ${esc(d.a)}</div>` : `<div class="mini">${dishCard(d)}</div>`;
+  const learn = d.fact ? `<div class="mini"><b>התשובה:</b> ${esc(d.a)}</div>` : `<div class="mini"><b>${esc(d.n)}:</b>${ingChips(d)}${ok ? "" : aidsHTML(d)}</div>`;
   document.getElementById("fb").innerHTML = `<div class="fb ${ok ? "ok" : "no"}"><div class="t">${ok ? pick(PRAISE) : pick(OOPS)}</div>${extra}${!ok && q.kind !== "build" ? `<div><b>התשובה הנכונה:</b> ${esc(q.answer)}</div>` : ""}${learn}</div>
   <button class="btn ${ok ? "" : "gold"}" id="nx" onclick="nextQuestion()">הבא ←</button>`;
   document.getElementById("nx").scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -991,7 +1128,7 @@ function finish() {
   if (!Q.n) { Q = null; return go("home"); }
   const pct = Math.round(Q.right / Q.n * 100);
   let headline = "", rec = false;
-  if (mode === "exam") { if (pct > S.best.exam) { S.best.exam = pct; rec = true; } headline = `<div class="score">${pct}%</div><div class="grade">${pct >= 95 ? "מוכנה למבחן! 👑" : pct >= 85 ? "כמעט שם! עוד סיבוב 💪" : pct >= 70 ? "בדרך הנכונה 🌱" : "עוד קצת כרטיסיות ונחזור 📖"}</div>`; }
+  if (mode === "exam") { if (pct > S.best.exam) { S.best.exam = pct; rec = true; } headline = `<div class="score">${pct}%</div><div class="grade">${pct >= 95 ? "מוכנה למבחן! 👑" : pct >= 85 ? "כמעט שם! עוד סיבוב 💪" : pct >= 70 ? "בדרך הנכונה 🌱" : "עוד קצת מסלול לימוד ונחזור 📚"}</div>`; }
   else if (mode === "sprint") { if (Q.right > S.best.sprint) { S.best.sprint = Q.right; rec = true; } headline = `<div class="score">${Q.right}</div><div class="grade">תשובות נכונות ב-60 שניות${rec ? " · שיא חדש! 🏆" : ""}</div>`; }
   else headline = `<div class="score">${Q.right}/${Q.n}</div><div class="grade">רצף הכי ארוך: ${Q.bestCombo} 🔥</div>`;
   save();
@@ -1003,12 +1140,13 @@ function finish() {
     ${mistakes.length ? `<h2>על מה לחזור (${mistakes.length})</h2>` + mistakes.map(l => {
       const d = l.q.item;
       const qt = l.q.kind === "build" ? "בני את המנה: " + esc(d.n) : (l.q.html ? l.q.text : esc(l.q.text));
-      return `<div class="mistake"><div class="q">${qt}</div>${l.q.ings ? `<div class="y" style="color:var(--muted)">${esc(l.q.ings)}</div>` : ""}<div class="a">✓ ${esc(l.q.answer)}</div>${l.your ? `<div class="y">✗ ${esc(l.your)}</div>` : ""}${d.fact ? "" : `<div class="mini" style="background:var(--paper2)">${esc(d.n)}: ${esc(d.d || (d.i || []).join(", "))}</div>`}</div>`;
+      return `<div class="mistake"><div class="q">${qt}</div>${l.q.ings ? `<div class="y" style="color:var(--muted)">${esc(l.q.ings)}</div>` : ""}<div class="a">✓ ${esc(l.q.answer)}</div>${l.your ? `<div class="y">✗ ${esc(l.your)}</div>` : ""}${d.fact ? "" : `<div class="mini" style="background:var(--paper2)"><b>${esc(d.n)}:</b>${ingChips(d)}</div>`}</div>`;
     }).join("") : `<p class="sub center">בלי אף טעות! 🎉</p>`}`;
   Q = null;
 }
 
 go("home");
+
 </script>
 </body>
 </html>
