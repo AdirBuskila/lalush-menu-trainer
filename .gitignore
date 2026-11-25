@@ -1,3 +1,4 @@
 *.pdf
 .claude/
 __pycache__/
+python-2/
