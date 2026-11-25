@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2f5d6e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>מבחן תפריט · ללוש</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#e9e0cf; --paper2:#f6f1e7; --card:#fffdf8; --ink:#23323a; --muted:#6b7a80;
+  --teal:#2f5d6e; --teal2:#3f7a8c; --gold:#d79a2b; --gold2:#f0c15c;
+  --ok:#2e9e6a; --okbg:#e3f5ec; --bad:#d9534f; --badbg:#fbe7e6; --warn:#e08a1e;
+  --r:18px; --shadow:0 6px 20px rgba(35,50,58,.10);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:Heebo,system-ui,"Segoe UI",Arial,sans-serif}
+body{min-height:100vh;background:
+  radial-gradient(circle at 10% 0%,rgba(215,154,43,.12),transparent 40%),
+  radial-gradient(circle at 100% 30%,rgba(47,93,110,.10),transparent 45%),var(--paper)}
+button{font-family:inherit;cursor:pointer;border:0;color:inherit}
+#app{max-width:560px;margin:0 auto;padding:16px 16px calc(40px + env(safe-area-inset-bottom))}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px}
+.back{background:var(--card);width:42px;height:42px;border-radius:14px;font-size:20px;box-shadow:var(--shadow)}
+.pill{background:var(--card);border-radius:999px;padding:7px 12px;font-weight:700;font-size:14px;box-shadow:var(--shadow);display:inline-flex;gap:6px;align-items:center}
+.logo{font-weight:900;letter-spacing:.5px;color:var(--teal);font-size:15px;direction:ltr}
+.logo span{border-bottom:2px solid var(--teal);padding:0 2px;margin:0 2px;font-size:12px}
+h1{font-size:30px;margin:6px 0 2px;font-weight:900}
+h2{font-size:20px;margin:18px 0 10px;font-weight:800}
+.sub{color:var(--muted);margin:0 0 14px;font-size:15px}
+.hero{background:linear-gradient(135deg,var(--teal),#1f4150);color:#fff;border-radius:24px;padding:20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.hero:after{content:"🍽️";position:absolute;left:-10px;bottom:-22px;font-size:110px;opacity:.12;transform:rotate(-15deg)}
+.hero .row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.stat{background:rgba(255,255,255,.13);border-radius:14px;padding:8px 12px;font-size:13px}
+.stat b{display:block;font-size:20px}
+.lvlbar{height:10px;background:rgba(255,255,255,.2);border-radius:99px;margin-top:12px;overflow:hidden}
+.lvlbar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold2),var(--gold));border-radius:99px;transition:width .6s}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.mode{background:var(--card);border-radius:var(--r);padding:16px 14px;text-align:right;box-shadow:var(--shadow);transition:transform .12s;min-height:118px;display:flex;flex-direction:column;gap:4px}
+.mode:active{transform:scale(.97)}
+.mode .ic{font-size:30px}
+.mode b{font-size:17px}
+.mode small{color:var(--muted);font-size:13px;line-height:1.35}
+.mode.wide{grid-column:1/-1;flex-direction:row;align-items:center;gap:14px;min-height:0;background:linear-gradient(135deg,#fff6e3,#ffe9bd)}
+.mode.wide .ic{font-size:38px}
+.catlist{display:flex;flex-direction:column;gap:10px}
+.cat{background:var(--card);border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow);text-align:right;width:100%}
+.cat .em{font-size:26px;width:36px;text-align:center}
+.cat .t{flex:1}
+.cat .t b{display:block;font-size:16px}
+.cat .t small{color:var(--muted)}
+.bar{height:7px;background:#ece4d4;border-radius:9px;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--teal2),var(--ok));border-radius:9px}
+.pct{font-weight:800;color:var(--teal);font-size:14px;min-width:42px;text-align:left}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:var(--paper2);border:2px solid #e2d7c3;border-radius:999px;padding:8px 13px;font-size:15px;font-weight:500;transition:all .15s;line-height:1.25}
+.chip.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.chip.good{background:var(--okbg);border-color:var(--ok);color:#17663f}
+.chip.bad{background:var(--badbg);border-color:var(--bad);color:#9b2622;text-decoration:line-through}
+.chip.miss{background:#fff4e0;border-color:var(--warn);color:#8a4d00;border-style:dashed}
+.chip.ro{cursor:default}
+/* quiz */
+.qhead{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.prog{flex:1;height:10px;background:#ddd2bf;border-radius:99px;overflow:hidden}
+.prog i{display:block;height:100%;background:linear-gradient(90deg,var(--gold2),var(--gold));transition:width .35s}
+.qcard{background:var(--card);border-radius:24px;padding:20px;box-shadow:var(--shadow);animation:pop .25s ease}
+@keyframes pop{from{transform:translateY(8px) scale(.98);opacity:0}to{transform:none;opacity:1}}
+.qtype{font-size:12px;font-weight:800;color:var(--gold);letter-spacing:.3px;margin-bottom:6px}
+.qtext{font-size:21px;font-weight:800;line-height:1.35;margin:0 0 6px}
+.qdish{display:inline-block;background:#eef4f6;color:var(--teal);border-radius:10px;padding:2px 10px;margin-top:2px}
+.qsub{color:var(--muted);font-size:14px;margin-bottom:14px}
+.ings{background:var(--paper2);border-radius:14px;padding:12px 14px;margin:10px 0 14px;font-size:16px;line-height:1.6}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{background:var(--paper2);border:2px solid #e2d7c3;border-radius:16px;padding:14px 16px;text-align:right;font-size:17px;font-weight:600;transition:all .15s}
+.opt:active{transform:scale(.98)}
+.opt.good{background:var(--okbg);border-color:var(--ok)}
+.opt.bad{background:var(--badbg);border-color:var(--bad);animation:shake .35s}
+.opt.dim{opacity:.5}
+.tf{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tf .opt{text-align:center;font-size:20px;padding:18px}
+@keyframes shake{0%,100%{transform:none}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.btn{display:block;width:100%;background:var(--teal);color:#fff;border-radius:16px;padding:15px;font-size:17px;font-weight:800;margin-top:14px;box-shadow:0 6px 14px rgba(47,93,110,.25)}
+.btn:active{transform:scale(.98)}
+.btn.gold{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#3b2a06}
+.btn.ghost{background:var(--card);color:var(--teal);box-shadow:var(--shadow)}
+.btn:disabled{opacity:.45}
+.fb{margin-top:14px;border-radius:16px;padding:14px;animation:pop .2s}
+.fb.ok{background:var(--okbg)}
+.fb.no{background:var(--badbg)}
+.fb .t{font-weight:900;font-size:18px;margin-bottom:6px}
+.mini{background:#fff;border-radius:12px;padding:10px 12px;margin-top:8px;font-size:14px;line-height:1.55}
+.mini b{color:var(--teal)}
+.combo{font-weight:900;color:var(--gold);font-size:15px;min-width:54px;text-align:center}
+.combo.hot{animation:pulse .6s infinite alternate;color:#e0561e}
+@keyframes pulse{to{transform:scale(1.15)}}
+.timer{font-weight:900;font-size:18px;color:var(--teal);min-width:46px;text-align:center}
+.timer.low{color:var(--bad)}
+/* flashcards */
+.flip{perspective:1200px;margin-top:6px}
+.fc{cursor:pointer}
+.face{background:var(--card);border-radius:24px;box-shadow:var(--shadow);padding:22px;min-height:340px;animation:flipin .35s ease}
+@keyframes flipin{from{transform:rotateY(90deg);opacity:.3}to{transform:none;opacity:1}}
+.face.front{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:linear-gradient(160deg,#fff,#f8efdc)}
+.face.front .nm{font-size:28px;font-weight:900;line-height:1.25}
+.face.front .hint{color:var(--muted);margin-top:16px;font-size:14px}
+.face.rear,.fc.flipped .face.front{display:none}
+.fc.flipped .face.rear{display:block}
+.dishname{font-size:21px;font-weight:900;display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.price{background:var(--gold);color:#3b2a06;border-radius:10px;padding:2px 10px;font-weight:900;white-space:nowrap;font-size:16px}
+.desc{font-size:16px;line-height:1.65;margin:10px 0}
+.note{background:#fff6e3;border-right:4px solid var(--gold);padding:8px 10px;border-radius:8px;font-size:14px;margin-top:6px}
+.tags{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.tag{font-size:12px;font-weight:800;padding:3px 8px;border-radius:8px;background:#e7f1e9;color:#256b40}
+.tag.h{background:#fde6dc;color:#b3401a}
+.tag.b{background:#fff1cf;color:#8a5a00}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.counter{text-align:center;color:var(--muted);font-weight:700;margin:10px 0 0}
+/* menu browser */
+.search{width:100%;padding:14px 16px;border-radius:16px;border:2px solid #e2d7c3;background:var(--card);font-size:16px;font-family:inherit;margin-bottom:12px}
+.dish{background:var(--card);border-radius:16px;padding:14px;margin-bottom:10px;box-shadow:var(--shadow)}
+.dish .dishname{font-size:17px}
+.dish .desc{font-size:15px;margin:6px 0 0}
+.mast{font-size:12px;color:var(--muted);margin-top:6px}
+.dots{letter-spacing:2px}
+.sec{position:sticky;top:0;background:var(--paper);padding:10px 0 6px;z-index:2;font-weight:900;font-size:19px;color:var(--teal)}
+.sec small{display:block;color:var(--muted);font-weight:500;font-size:13px}
+/* learning path + memory aids */
+.learnbtn{display:flex;align-items:center;gap:14px;width:100%;margin-top:16px;padding:18px 16px;border-radius:22px;text-align:right;color:#3b2a06;background:linear-gradient(135deg,var(--gold2),var(--gold));box-shadow:0 8px 22px rgba(215,154,43,.35);animation:glow 2.2s infinite alternate}
+.learnbtn .ic{font-size:40px}
+.learnbtn b{display:block;font-size:19px;font-weight:900;margin:2px 0}
+.learnbtn small{display:block;font-size:13px;opacity:.85;line-height:1.35}
+.learnbtn .go{font-size:26px;font-weight:900}
+@keyframes glow{to{box-shadow:0 8px 30px rgba(215,154,43,.6)}}
+.path{display:flex;flex-direction:column;gap:8px;margin-bottom:8px;border-right:3px dashed #cdbfa6;padding-right:10px}
+.node{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow);text-align:right;width:100%}
+.node .nic{font-size:20px;min-width:30px;text-align:center}
+.node .t{flex:1}.node b{display:block;font-size:15px;line-height:1.35}.node small{color:var(--muted)}
+.node.done{background:#f1f8f3}
+.node.next{outline:3px solid var(--gold);background:#fff8e8}
+.node.review{background:#eef4f6}
+.aid{background:var(--paper2);border-radius:12px;padding:9px 12px;margin-top:8px;font-size:14px;line-height:1.55}
+.aid.warn{background:#fff1e6;border-right:4px solid var(--warn)}
+.acr{display:block;font-weight:900;color:var(--teal);font-size:18px;letter-spacing:1px;margin-top:2px}
+.chip.sig{background:#fff3d1;border-color:var(--gold)}
+.chip.sig:after{content:" ⭐"}
+.chips.num .chip i{font-style:normal;font-weight:900;background:var(--teal);color:#fff;border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;margin-left:7px;font-size:11px;vertical-align:1px}
+.chip.blank{background:#fff;border:2px dashed var(--gold);color:var(--gold);font-weight:900;min-width:60px;text-align:center}
+.chip.hidden{background:#e5dccb;color:transparent;border-color:#d8ccb5;cursor:pointer}
+.chip.hidden span{filter:blur(6px)}
+.chip.hidden{min-width:90px}
+.note.teal{border-color:var(--teal);background:#eef4f6}
+/* results */
+.score{font-size:64px;font-weight:900;text-align:center;color:var(--teal);margin:6px 0 0}
+.grade{text-align:center;font-size:20px;font-weight:800;margin-bottom:8px}
+.mistake{background:var(--card);border-radius:16px;padding:12px 14px;margin-bottom:10px;box-shadow:var(--shadow);border-right:5px solid var(--bad)}
+.mistake .q{font-weight:800;margin-bottom:4px}
+.mistake .a{color:var(--ok);font-weight:700}
+.mistake .y{color:var(--bad);font-size:14px}
+.toggle{display:flex;justify-content:space-between;align-items:center;background:var(--card);border-radius:16px;padding:14px;box-shadow:var(--shadow);margin-bottom:10px;font-weight:700}
+.sw{width:50px;height:28px;border-radius:99px;background:#cfc5b2;position:relative;transition:.2s}
+.sw:after{content:"";position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.2s}
+.sw.on{background:var(--ok)}
+.sw.on:after{right:25px}
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:99px;font-weight:800;z-index:50;animation:pop .25s;box-shadow:var(--shadow)}
+.xpfly{position:fixed;font-weight:900;color:var(--gold);font-size:22px;pointer-events:none;z-index:40;animation:fly 1s forwards}
+@keyframes fly{to{transform:translateY(-70px);opacity:0}}
+canvas#cf{position:fixed;inset:0;pointer-events:none;z-index:60}
+.center{text-align:center}
+.foot{color:var(--muted);font-size:12px;text-align:center;margin-top:24px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<canvas id="cf"></canvas>
+<script>
+// Cafe LaLush (Holon) menu, transcribed from the two printed PDF menus in this folder.
+// i = ingredients (used for quizzes), d = description exactly as printed, x = extra notes,
+// v = vegan (leaf icon), h = spicy (chili icon), b = also on the breakfast menu.
+window.CATS = [
+  { id: "dough", name: "בצקים מהטאבון", emoji: "🔥", note: "בצק טרי יום יום", group: "food" },
+  { id: "toast", name: "ללוש בלחם", emoji: "🥪", note: "טוסטים עשויים בלחם קסטן. מוגש עם סלט ירקות טרי ואיולי פסטו", group: "food" },
+  { id: "brunch", name: "בוקר מאוחר", emoji: "🍳", note: "המנות האלה מופיעות גם בתפריט הבוקר", group: "food" },
+  { id: "starters", name: "ראשונות", emoji: "🥗", note: "", group: "food" },
+  { id: "salads", name: "סלטים", emoji: "🥬", note: "מוגש עם מקל פוקאצ'ה פרמז'ן", group: "food" },
+  { id: "mains", name: "עיקריות", emoji: "🍗", note: "דגה טרייה", group: "food" },
+  { id: "pasta", name: "מארץ המגף", emoji: "🍝", note: "פסטה טרייה | הפסטות מוגשות עם פרמז'ן", group: "food" },
+  { id: "breakfast", name: "ארוחות בוקר", emoji: "☀️", note: "מוגש עד השעה 12:00", group: "food" },
+];
+
+window.DISHES = [
+  // ---------- בצקים מהטאבון ----------
+  { id: "foc-classic", c: "dough", n: "פוקאצ'ה קלאסית", p: 39, v: 1,
+    d: "טריה וחמימה, מוגשת עם טחינה, שמן זית בלסמי קונפי שום, סלסת עגבניות טריות.",
+    i: ["טחינה", "שמן זית בלסמי", "קונפי שום", "סלסת עגבניות טריות"] },
+  { id: "foc-parm", c: "dough", n: "פוקאצ'ה פרמז'ן", p: 49,
+    d: "ממרח עגבניות מיובשות, פסטו, פרמז'ן גראנה פדאנה.",
+    i: ["ממרח עגבניות מיובשות", "פסטו", "פרמז'ן גראנה פדאנה"] },
+  { id: "foc-salmon", c: "dough", n: "פוקאצ'ה סלמון לימונית", p: 62,
+    d: "מוצרלה, קוביות סלמון טרי, תרד, גרידת לימון, סלסת עגבניות.",
+    i: ["מוצרלה", "קוביות סלמון טרי", "תרד", "גרידת לימון", "סלסת עגבניות"] },
+  { id: "foc-hot", c: "dough", n: "פוקאצ'ה חריפים", p: 53, h: 1,
+    d: "שרי צלויות, קונפי שום, סחוג, פלפל חריף, זילופי טחינה.",
+    i: ["שרי צלויות", "קונפי שום", "סחוג", "פלפל חריף", "זילופי טחינה"] },
+  { id: "pz-marg", c: "dough", n: "פיצה מרגריטה", p: 65,
+    d: "רוטב עגבניות, בזיליקום, גבינת מוצרלה.",
+    i: ["רוטב עגבניות", "בזיליקום", "גבינת מוצרלה"],
+    x: ["תוספות: פטריות טריות / זיתי קלמטה / פלפל חריף / עגבניה / בצל סגול / בולגרית — 6₪ לתוספת"] },
+  { id: "pz-vegan", c: "dough", n: "פיצה מרגריטה טבעונית", p: 65, v: 1,
+    d: "רוטב עגבניות, בזיליקום, גבינה טבעונית.",
+    i: ["רוטב עגבניות", "בזיליקום", "גבינה טבעונית"],
+    x: ["תוספות: פטריות טריות / זיתי קלמטה / פלפל חריף / עגבניה / בצל סגול / בולגרית — 6₪ לתוספת"] },
+  { id: "pz-meat", c: "dough", n: "פיצה בשר וטחינה", p: 67,
+    d: "רוטב עגבניות, בשר טחון, ירקות שורש יין אדום, זילופי טחינה.",
+    i: ["רוטב עגבניות", "בשר טחון", "ירקות שורש", "יין אדום", "זילופי טחינה"] },
+  { id: "pz-4cheese", c: "dough", n: "פיצה 4 גבינות ופטריות", p: 75,
+    d: "רוטב עגבניות, מוצרלה, בולגרית, שמנת, פרמז'ן, פטריות טריות.",
+    i: ["רוטב עגבניות", "מוצרלה", "בולגרית", "שמנת", "פרמז'ן", "פטריות טריות"] },
+  { id: "pz-sweet", c: "dough", n: "פיצה בטטה, פטה ודבש", p: 69,
+    d: "רוטב עגבניות, מוצרלה, קוביות בטטה קלויה, פטה, בצל ירוק, דבש.",
+    i: ["רוטב עגבניות", "מוצרלה", "קוביות בטטה קלויה", "פטה", "בצל ירוק", "דבש"] },
+  { id: "pz-bianca", c: "dough", n: "פיצה ביאנקה", p: 75,
+    d: "קרם מסקרפונה כמהין, עלי תרד, פרמז'ן מגורר, שקדים קלויים.",
+    i: ["קרם מסקרפונה כמהין", "עלי תרד", "פרמז'ן מגורר", "שקדים קלויים"] },
+  { id: "pz-burrata", c: "dough", n: "פיצה בוראטה", p: 79,
+    d: "ממרח פסטו, עגבניות שרי, כדור בוראטה, קרם בלסמי, אורוגולה.",
+    i: ["ממרח פסטו", "עגבניות שרי", "כדור בוראטה", "קרם בלסמי", "ארוגולה"] },
+
+  // ---------- ללוש בלחם ----------
+  { id: "t-pesto", c: "toast", n: "טוסט פסטו בולגרית", p: 59,
+    d: "חמאה, פסטו, צהובה, בולגרית ועגבניה.",
+    i: ["חמאה", "פסטו", "צהובה", "בולגרית", "עגבניה"] },
+  { id: "t-4cheese", c: "toast", n: "טוסט 4 גבינות וכמהין", p: 59,
+    d: "שמנת כמהין, צהובה, מוצרלה, בולגרית, עגבניה.",
+    i: ["שמנת כמהין", "צהובה", "מוצרלה", "בולגרית", "עגבניה"] },
+  { id: "t-cheddar", c: "toast", n: "טוסט צ'דר כמו באמריקה", p: 59,
+    d: "חמאה, צ'דר, בצל מטוגן, פטריות קלויות, עגבניה.",
+    i: ["חמאה", "צ'דר", "בצל מטוגן", "פטריות קלויות", "עגבניה"] },
+  { id: "t-omelet", c: "toast", n: "אומלט פרמז'ן בחלה", p: 61,
+    d: "גבינת שמנת, מלפפון כבוש, עגבניה, חסה, חביתת פרמז'ן.",
+    i: ["גבינת שמנת", "מלפפון כבוש", "עגבניה", "חסה", "חביתת פרמז'ן"],
+    x: ["שימי לב: מוגש בחלה (לא בקסטן)"] },
+  { id: "s-tuna", c: "toast", n: "כריך טונה", p: 59,
+    d: "אריסה לימון כבוש, ביצה קשה, טונה, תפו״א ומלפפון כבוש.",
+    i: ["אריסה לימון כבוש", "ביצה קשה", "טונה", "תפו״א", "מלפפון כבוש"] },
+  { id: "s-salmon", c: "toast", n: "כריך סלמון מעושן", p: 75,
+    d: "סלמון מעושן, גבינת שמנת, עגבניה, ארוגולה.",
+    i: ["סלמון מעושן", "גבינת שמנת", "עגבניה", "ארוגולה"] },
+  { id: "s-chicken", c: "toast", n: "כריך עוף", p: 73,
+    d: "מיונז, חרדל, עוף צרוב, פטריות ובצל מוקפצים, עגבניה, עלים ירוקים.",
+    i: ["מיונז", "חרדל", "עוף צרוב", "פטריות ובצל מוקפצים", "עגבניה", "עלים ירוקים"] },
+  { id: "s-steak", c: "toast", n: "כריך מינוט סטייק אנטריקוט", p: 79,
+    d: "איולי לימון, עגבניה, עלים ירוקים, בצל מקורמל, אנטריקוט פרוס דק על הפלאנצ'ה, ביצת עין, בתוספת צ'יפס.",
+    i: ["איולי לימון", "עגבניה", "עלים ירוקים", "בצל מקורמל", "אנטריקוט פרוס דק על הפלאנצ'ה", "ביצת עין", "צ'יפס"] },
+  { id: "s-schnitzel", c: "toast", n: "שניצל בחלה רכה", p: 77,
+    d: "טבעות בצל סגול, סלט עגבניות חריף, חציל מטוגן, שניצל קריספי, טחינה, בתוספת צ'יפס.",
+    i: ["טבעות בצל סגול", "סלט עגבניות חריף", "חציל מטוגן", "שניצל קריספי", "טחינה", "צ'יפס"],
+    x: ["שימי לב: מוגש בחלה רכה"] },
+
+  // ---------- בוקר מאוחר (גם בתפריט בוקר) ----------
+  { id: "pretzel", c: "brunch", b: 1, n: "פרעצל קרואסון כמהין", p: 69,
+    d: "במילוי גבינת מסקרפונה וטרטופו, חסה לאליק, מקושקשת פטריות, צ'ילי אדום, סלט ירקות.",
+    i: ["גבינת מסקרפונה", "טרטופו", "חסה לאליק", "מקושקשת פטריות", "צ'ילי אדום", "סלט ירקות"] },
+  { id: "shak-red", c: "brunch", b: 1, n: "שקשוקה אדומה", p: 71,
+    d: "2 ביצים בתבשיל עגבניות ופלפלים, בבישול ארוך. מוגש עם סלט ירקות, טחינה, זיתים מתובלים וחלה.",
+    i: ["2 ביצים", "תבשיל עגבניות ופלפלים", "סלט ירקות", "טחינה", "זיתים מתובלים", "חלה"] },
+  { id: "shak-country", c: "brunch", b: 1, n: "שקשוקה כפרית", p: 73,
+    d: "2 ביצים בתבשיל עגבניות ופלפלים, תרד, מיקס פטריות, שום וקרם שמנת. מוגש עם סלט ירקות, טחינה, זיתים מתובלים וחלה.",
+    i: ["2 ביצים", "תבשיל עגבניות ופלפלים", "תרד", "מיקס פטריות", "שום", "קרם שמנת", "סלט ירקות", "טחינה", "זיתים מתובלים", "חלה"] },
+  { id: "bruschetta", c: "brunch", b: 1, n: "ברוסקטה אבוקדו וביצה עלומה", p: 59,
+    d: "זוג ברוסקטות בריוש, סלט אבוקדו, ביצים עלומות, פרמז'ן, שאטה גרוס.",
+    i: ["זוג ברוסקטות בריוש", "סלט אבוקדו", "ביצים עלומות", "פרמז'ן", "שאטה גרוס"] },
+  { id: "clouds", c: "brunch", b: 1, n: "מקושקשת עננים", p: 61,
+    d: "מקושקשת חמאה ופטריות רכה, על חלה קלוייה, קרם שמנת, סלסת עגבניות, פרמז'ן.",
+    i: ["מקושקשת חמאה ופטריות", "חלה קלויה", "קרם שמנת", "סלסת עגבניות", "פרמז'ן"] },
+
+  // ---------- ראשונות ----------
+  { id: "cauli", c: "starters", n: "פרחי כרובית", p: 59, v: 1,
+    d: "כרובית מטוגנת בקמח מתובל, רסק עגבניות טריות, טחינה לבנה, פלפל צ'ילי טרי.",
+    i: ["כרובית מטוגנת בקמח מתובל", "רסק עגבניות טריות", "טחינה לבנה", "פלפל צ'ילי טרי"] },
+  { id: "brie", c: "starters", n: "ברי ברולה", p: 63,
+    d: "גבינת ברי מקורמלת, סלטון שרי, ארוגולה, סלק צלוי, פרי עונתי, פקאן מסוכר, ויניגרט רימונים.",
+    i: ["גבינת ברי מקורמלת", "סלטון שרי", "ארוגולה", "סלק צלוי", "פרי עונתי", "פקאן מסוכר", "ויניגרט רימונים"] },
+  { id: "arancini", c: "starters", n: "ארנצ'יני כמהין (3 יח')", p: 61,
+    d: "כדורי ריזוטו כמהין על רוטב שמנת עגבניות, פסטו, קרם פרמז'ן.",
+    i: ["כדורי ריזוטו כמהין", "רוטב שמנת עגבניות", "פסטו", "קרם פרמז'ן"],
+    x: ["3 יחידות במנה"] },
+  { id: "burrata", c: "starters", n: "בוראטה טומטינה", p: 77,
+    d: "עגבניות בצבעים, בזיליקום, פרמז'ן, בלסמי מצומצם, טוסטוני בריוש.",
+    i: ["עגבניות בצבעים", "בזיליקום", "פרמז'ן", "בלסמי מצומצם", "טוסטוני בריוש"] },
+  { id: "carpaccio", c: "starters", n: "קרפצ'יו חציל בטאבון", p: 55,
+    d: "חציל קלוי בטאבון, קוויאר עדשים שחורות, סלסת עגבניות, טחינה, פרוסות צנונית, צ'ילי אדום, עשבי תיבול, מקל פוקאצ'ה.",
+    i: ["חציל קלוי בטאבון", "קוויאר עדשים שחורות", "סלסת עגבניות", "טחינה", "פרוסות צנונית", "צ'ילי אדום", "עשבי תיבול", "מקל פוקאצ'ה"] },
+  { id: "fries", c: "starters", n: "צ'יפס ומטבלים", p: "27/39",
+    d: "צ'יפס דק ופריך, איולי לימון, קטשופ, מיונז.",
+    i: ["צ'יפס דק ופריך", "איולי לימון", "קטשופ", "מיונז"],
+    x: ["שני גדלים: 27₪ / 39₪"] },
+  { id: "artichoke", c: "starters", n: "ארטישוק א לה רומאנה", p: 55,
+    d: "בציפוי קמח מתובל, איולי פרמז'ן, בלסמי מצומצם, קונפי שום.",
+    i: ["ציפוי קמח מתובל", "איולי פרמז'ן", "בלסמי מצומצם", "קונפי שום"] },
+  { id: "vine", c: "starters", n: "קריספי עלי גפן על לאבנה", p: 59,
+    d: "עלי גפן במילוי אורז מתובל, בציפוי פריך, על קרם לאבנה, שמן זית.",
+    i: ["עלי גפן במילוי אורז מתובל", "ציפוי פריך", "קרם לאבנה", "שמן זית"] },
+  { id: "soup", c: "starters", n: "מרק בעונה", p: 39,
+    d: "מרק ביתי משתנה, מוגש עם קרוטונים.",
+    i: ["מרק ביתי משתנה", "קרוטונים"] },
+
+  // ---------- סלטים ----------
+  { id: "caprese", c: "salads", n: "קפרזה מוצרלה פרסקה", p: 75,
+    d: "מבחר עגבניות, קלמטה, בצל סגול, עלי אורוגולה, לאליק, קרעי מוצרלה, בזיליקום טרי, שום קונפי, קרם בלסמי, צנובר קלוי.",
+    i: ["מבחר עגבניות", "קלמטה", "בצל סגול", "עלי ארוגולה", "לאליק", "קרעי מוצרלה", "בזיליקום טרי", "שום קונפי", "קרם בלסמי", "צנובר קלוי"] },
+  { id: "citrus", c: "salads", n: "עוף הדרים", p: 73,
+    d: "כרוב לבן, גזר קולפן, גמבה, חסה, מלפפון, חזה עוף במרינדה, שקדים, קראנצ' בצל, ויניגרט הדרים.",
+    i: ["כרוב לבן", "גזר קולפן", "גמבה", "חסה", "מלפפון", "חזה עוף במרינדה", "שקדים", "קראנץ' בצל", "ויניגרט הדרים"],
+    x: ["טבעוני: ללא העוף, עם פטריות פורטובלו בגריל 🌿"] },
+  { id: "pears", c: "salads", n: "אגסים, תפוחים וגבינה כחולה", p: 73,
+    d: "חסה, אורוגולה, בצל סגול, עגבניות שרי, פלחי אגסים ותפוחי עץ, פירורי גבינה כחולה ואגוזי מלך בויניגרט חומץ יין אדום מרענן.",
+    i: ["חסה", "ארוגולה", "בצל סגול", "עגבניות שרי", "פלחי אגסים", "תפוחי עץ", "פירורי גבינה כחולה", "אגוזי מלך", "ויניגרט חומץ יין אדום"] },
+  { id: "caesar", c: "salads", n: "קיסר קלאסי", p: 75,
+    d: "מבחר עלים רעננים, עגבניות שרי צבעוניות, צנונית, קרוטונים ופרמז'ן מגורר ברוטב קיסר עשיר.",
+    i: ["מבחר עלים רעננים", "עגבניות שרי צבעוניות", "צנונית", "קרוטונים", "פרמז'ן מגורר", "רוטב קיסר"],
+    x: ["תוספת חזה עוף בגריל — 19₪"] },
+  { id: "israeli", c: "salads", n: "כל ישראלי", p: 71,
+    d: "מבחר עגבניות, מיקס חסות, מלפפון, זיתי קלמטה, בולגרית, ויניגרט לימון שמן זית.",
+    i: ["מבחר עגבניות", "מיקס חסות", "מלפפון", "זיתי קלמטה", "בולגרית", "ויניגרט לימון שמן זית"],
+    x: ["טבעוני: ללא הגבינה 🌿"] },
+  { id: "roasted", c: "salads", n: "קלויים ופרמז'ן", p: 75,
+    d: "מבחר פטריות, זוקיני ואספרגוס קלויים במחבת, על עגבניות שרי וחסה, אגוזים ברוטב פרמז'ן.",
+    i: ["מבחר פטריות", "זוקיני", "אספרגוס", "עגבניות שרי", "חסה", "אגוזים", "רוטב פרמז'ן"],
+    x: ["הפטריות, הזוקיני והאספרגוס קלויים במחבת"] },
+  { id: "beet", c: "salads", n: "סלק ברי ופקאן", p: 72,
+    d: "מיקס חסה, שרי צבעוני, בצל סגול, צנונית, סלק צלוי, גבינת ברי, פקאן מסוכר, ויניגרט חרדל בזיליקום.",
+    i: ["מיקס חסה", "שרי צבעוני", "בצל סגול", "צנונית", "סלק צלוי", "גבינת ברי", "פקאן מסוכר", "ויניגרט חרדל בזיליקום"] },
+  { id: "bulgur", c: "salads", n: "בורגול לאבנה", p: 69,
+    d: "המון עשבים, בורגול דק, עגבניות קצוצות, חמוציות, שקדים, קראנץ' בטטה, על לאבנה.",
+    i: ["המון עשבים", "בורגול דק", "עגבניות קצוצות", "חמוציות", "שקדים", "קראנץ' בטטה", "לאבנה"],
+    x: ["טבעוני: ללא הלאבנה 🌿"] },
+  { id: "nuts", c: "salads", n: "אגוזים, שקדים ודברים טובים", p: 69, v: 1,
+    d: "עלים ירוקים, תרד, שרי, בצל ירוק, צנונית, בצל סגול, אגוזים, שקדים, פקאן מסוכר, ויניגרט רימונים.",
+    i: ["עלים ירוקים", "תרד", "שרי", "בצל ירוק", "צנונית", "בצל סגול", "אגוזים", "שקדים", "פקאן מסוכר", "ויניגרט רימונים"],
+    x: ["תוספת בולגרית — 12₪"] },
+
+  // ---------- עיקריות ----------
+  { id: "salmon", c: "mains", n: "סלמון על ירקות ירוקים", p: 129,
+    d: "פילה סלמון על ירקות ירוקים מוקפצים בשום, שמן זית ויין לבן.",
+    i: ["פילה סלמון", "ירקות ירוקים מוקפצים בשום", "שמן זית", "יין לבן"] },
+  { id: "bass", c: "mains", n: "פילה בס", p: 125,
+    d: "צלוי בשום ויין לבן, על בייבי תפו״א, שמנת, אפונה ופרמז'ן.",
+    i: ["צלוי בשום ויין לבן", "בייבי תפו״א", "שמנת", "אפונה", "פרמז'ן"] },
+  { id: "pargit", c: "mains", n: "פרגית על תפו״א", p: 81,
+    d: "פרגית בגריל במשרה תבלינים ארומטי, בייבי תפו״א בשום ועשבי תיבול, צ'ימיצ'ורי, טחינה.",
+    i: ["פרגית בגריל", "משרה תבלינים ארומטי", "בייבי תפו״א בשום ועשבי תיבול", "צ'ימיצ'ורי", "טחינה"] },
+  { id: "liver", c: "mains", n: "כבד עוף", p: 75,
+    d: "כבד עוף טרי ומבחר פטריות, בצל מקורמל מוקפצים במחבת ביין אדום וציר בקר. מוגש על פירה תפו״א ובטטה קטיפתי.",
+    i: ["כבד עוף טרי", "מבחר פטריות", "בצל מקורמל", "יין אדום", "ציר בקר", "פירה תפו״א ובטטה"] },
+  { id: "breast", c: "mains", n: "חזה עוף", p: 75,
+    d: "חזה בגריל על אורז עשבי תיבול ושקדים, פטריות בציר בקר, טחינה.",
+    i: ["חזה בגריל", "אורז עשבי תיבול ושקדים", "פטריות בציר בקר", "טחינה"] },
+  { id: "burger", c: "mains", n: "המבורגר עגל עסיסי", p: 79,
+    d: "צלוי בגריל ומוגש בלחמנייה רכה עם ירקות טריים וצ'יפס.",
+    i: ["המבורגר עגל בגריל", "לחמנייה רכה", "ירקות טריים", "צ'יפס"],
+    x: ["תוספות 6₪: בצל מטוגן / ביצת עין / פטריות", "תוספות 10₪: גבינה כחולה / צ'דר"] },
+  { id: "vburger", c: "mains", n: "המבורגר טבעוני רדיפיין מיט", p: 73, v: 1,
+    d: "אפוי בטאבון. מוגש עם ירקות טריים וצ'יפס.",
+    i: ["אפוי בטאבון", "ירקות טריים", "צ'יפס"],
+    x: ["תוספות 6₪: בצל מטוגן / פטריות"] },
+  { id: "schnitzellush", c: "mains", n: "שניצללוש", p: 77,
+    d: "שניצל עוף, פירורי לחם מתובלים, צ'יפס ופלח לימון.",
+    i: ["שניצל עוף", "פירורי לחם מתובלים", "צ'יפס", "פלח לימון"] },
+
+  // ---------- מארץ המגף ----------
+  { id: "pap-salmon", c: "pasta", n: "פפרדלה סלמון פרימברה", p: 74,
+    d: "שום, שרי, אפונה, קוביות פלפלים, פטרוזיליה, מעט שמנת, סלמון טרי, מיץ לימון.",
+    i: ["שום", "שרי", "אפונה", "קוביות פלפלים", "פטרוזיליה", "מעט שמנת", "סלמון טרי", "מיץ לימון"] },
+  { id: "rig-trio", c: "pasta", n: "ריגטוני טריו", p: 59,
+    d: "ברוטב עגבניות ביתי / עגבניות ושמנת / שמנת.",
+    i: ["רוטב עגבניות ביתי", "רוטב עגבניות ושמנת", "רוטב שמנת"],
+    x: ["אחד משלושת הרטבים, לבחירת הלקוח"] },
+  { id: "bus-bolo", c: "pasta", n: "בוסייטה בולונז", p: 69,
+    d: "תבשיל בשר בקר בבישול איטי עם עגבניות וירקות שורש ביין אדום.",
+    i: ["בשר בקר בבישול איטי", "עגבניות", "ירקות שורש", "יין אדום"] },
+  { id: "rav-cheese", c: "pasta", n: "רביולי גבינות טרטופו", p: 78,
+    d: "רביולי במילוי גבינות, קרם שמנת כמהין ופרמז'ן.",
+    i: ["רביולי במילוי גבינות", "קרם שמנת כמהין", "פרמז'ן"] },
+  { id: "rav-sweet", c: "pasta", n: "רביולי בטטה, ערמונים ותרד", p: 76,
+    d: "קרם שמנת, פרמז'ן, לימון, ערמונים ותרד.",
+    i: ["קרם שמנת", "פרמז'ן", "לימון", "ערמונים", "תרד"] },
+  { id: "tortellini", c: "pasta", n: "טורטליני פולנטה מסקרפונה", p: 75,
+    d: "קרם שמנת, בזיליקום, שעועית ירוקה, קריספי בטטה.",
+    i: ["קרם שמנת", "בזיליקום", "שעועית ירוקה", "קריספי בטטה"] },
+  { id: "arrabbiata", c: "pasta", n: "פפרדלה ארביאטה", p: 69, h: 1,
+    d: "שום, קלמטה, שאטה, רוטב עגבניות, בזיליקום.",
+    i: ["שום", "קלמטה", "שאטה", "רוטב עגבניות", "בזיליקום"] },
+  { id: "aglio", c: "pasta", n: "בוסייטה אלי אוליו פלוס", p: 71,
+    d: "שמן זית, שום, זוקיני, שרי צבעוני, פטריות, פטרוזיליה, בזיליקום, שאטה.",
+    i: ["שמן זית", "שום", "זוקיני", "שרי צבעוני", "פטריות", "פטרוזיליה", "בזיליקום", "שאטה"] },
+  { id: "alfredo", c: "pasta", n: "ריגטוני אלפרדו פונגי", p: 72,
+    d: "שמנת, מבחר פטריות, שום וטימין.",
+    i: ["שמנת", "מבחר פטריות", "שום", "טימין"] },
+
+  // ---------- ארוחות בוקר ----------
+  { id: "b-two", c: "breakfast", n: "בוקר טוב לשניים", p: 157,
+    d: "2 ביצים לבחירה לסועד (מקושקשת / חביתה / עין / עין הפוכה), סלט ירקות, טחינת חציל, סלט טונה, שמנת סלסה, לאבנה עדשים שחורות, מטבל עגבניות, קרם פלפל פטה, סקורדליה, בולגרית פסטו, עלי גפן ביתיים. ריבה, חמאה, פוקאצ'ה / לחם לבן / מלא.",
+    i: ["סלט ירקות", "טחינת חציל", "סלט טונה", "שמנת סלסה", "לאבנה עדשים שחורות", "מטבל עגבניות", "קרם פלפל פטה", "סקורדליה", "בולגרית פסטו", "עלי גפן ביתיים", "ריבה", "חמאה"],
+    x: ["2 ביצים לכל סועד: מקושקשת / חביתה / עין / עין הפוכה",
+        "לחם: פוקאצ'ה / לחם לבן / מלא",
+        "תוספות (חינם): עשבי תיבול / בצל",
+        "תוספות בתשלום (5₪ לתוספת): פרמז'ן / מיקס פטריות / בולגרית / צהובה",
+        "שתיה חמה לבחירה: קפוצ'ינו / אספרסו / תה",
+        "שתיה קרה לבחירה: לימונדה / תפוזים טבעי / גזר טבעי"] },
+  { id: "b-toast", c: "breakfast", n: "טוסט ומטבלים של בוקר", p: 77,
+    d: "קסטן במילוי צ'דר, פטה פלפלים, פטריות שמפיניון, ביצת עין/הפוכה מעל, סלט רענן, איולי פסטו, סקורדליה, שמנת סלסה.",
+    i: ["לחם קסטן", "צ'דר", "פטה פלפלים", "פטריות שמפיניון", "ביצת עין/הפוכה מעל", "סלט רענן", "איולי פסטו", "סקורדליה", "שמנת סלסה"],
+    x: ["שתיה לבחירה: קפוצ'ינו / אספרסו / תה / לימונדה / תפוזים טבעי / גזר טבעי"] },
+  { id: "b-vegan", c: "breakfast", n: "בוקר ללוש טבעוני", p: 79, v: 1,
+    d: "חביתת קמח עדשים אדומות, גזר ופטרוזיליה, סלט ירקות טרי, פסטו בזיליקום, טחינה לבנה, קרם עגבניות מיובשות, תערובת זיתים, סלסה עם עדשים, גואקמולי, ריבה, פוקאצ'ה / לחם לבן / מלא.",
+    i: ["חביתת קמח עדשים אדומות", "סלט ירקות טרי", "פסטו בזיליקום", "טחינה לבנה", "קרם עגבניות מיובשות", "תערובת זיתים", "סלסה עם עדשים", "גואקמולי", "ריבה"],
+    x: ["החביתה: קמח עדשים אדומות, גזר ופטרוזיליה",
+        "לחם: פוקאצ'ה / לחם לבן / מלא",
+        "שתיה חמה לבחירה: קפוצ'ינו על חלב סויה / אספרסו / תה",
+        "שתיה קרה לבחירה: לימונדה / תפוזים טבעי / גזר טבעי"] },
+  { id: "b-french", c: "breakfast", n: "פרנצ'טוסט", p: 69,
+    d: "לחם בריוש קלוי בחמאה, תרד מאודה, בצל מטוגן, פרמז'ן, ביצת עין, סלט ירקות.",
+    i: ["לחם בריוש קלוי בחמאה", "תרד מאודה", "בצל מטוגן", "פרמז'ן", "ביצת עין", "סלט ירקות"] },
+  { id: "b-benedict", c: "breakfast", n: "אגז בנדיקט ופרמז'ן", p: 76,
+    d: "לחם בריוש קלוי בחמאה, קרם שמנת, סלמון מעושן, ביצים עלומות, הולנדייז פרמז'ן, סלט ירקות.",
+    i: ["לחם בריוש קלוי בחמאה", "קרם שמנת", "סלמון מעושן", "ביצים עלומות", "הולנדייז פרמז'ן", "סלט ירקות"] },
+
+];
+
+// Facts the examiner is likely to ask that don't fit an ingredient question.
+// c = category used for filtering, q = question, a = right answer, w = wrong answers.
+window.FACTS = [
+  { c: "salads", q: "עם מה מוגשים כל הסלטים?", a: "מקל פוקאצ'ה פרמז'ן", w: ["לחם קסטן קלוי", "קרוטונים בריוש", "פיתה מהטאבון"] },
+  { c: "toast", q: "מאיזה לחם עשויים הטוסטים?", a: "לחם קסטן", w: ["לחם בריוש", "חלה", "פוקאצ'ה"] },
+  { c: "toast", q: "עם מה מוגשים הטוסטים והכריכים?", a: "סלט ירקות טרי ואיולי פסטו", w: ["צ'יפס וקטשופ", "סלט ירקות וטחינה", "איולי לימון ומלפפון כבוש"] },
+  { c: "toast", q: "באיזה לחם מוגש האומלט פרמז'ן?", a: "חלה", w: ["לחם קסטן", "בריוש", "לחמנייה רכה"] },
+  { c: "toast", q: "אילו כריכים מגיעים בתוספת צ'יפס?", a: "מינוט סטייק אנטריקוט ושניצל בחלה רכה", w: ["כריך עוף וכריך טונה", "כריך סלמון ושניצל בחלה רכה", "כולם"] },
+  { c: "breakfast", q: "עד איזו שעה מוגשות ארוחות הבוקר?", a: "12:00", w: ["11:00", "12:30", "13:00"] },
+  { c: "pasta", q: "עם מה מוגשות כל הפסטות?", a: "פרמז'ן", w: ["לחם שום", "מקל פוקאצ'ה", "סלט ירוק"] },
+  { c: "pasta", q: "איזו פסטה מסומנת כחריפה 🌶️?", a: "פפרדלה ארביאטה", w: ["בוסייטה אלי אוליו פלוס", "ריגטוני טריו", "בוסייטה בולונז"] },
+  { c: "pasta", q: "אילו רטבים אפשר לבחור בריגטוני טריו?", a: "עגבניות ביתי / עגבניות ושמנת / שמנת", w: ["עגבניות / פסטו / שמנת", "שמנת / רוזה / אלפרדו", "עגבניות / שמנת פטריות / פסטו"] },
+  { c: "dough", q: "איזו מהבאות היא לא תוספת לפיצה מרגריטה?", a: "תירס", w: ["זיתי קלמטה", "בצל סגול", "בולגרית"] },
+  { c: "dough", q: "איזו פוקאצ'ה מסומנת כטבעונית?", a: "פוקאצ'ה קלאסית", w: ["פוקאצ'ה חריפים", "פוקאצ'ה פרמז'ן", "פוקאצ'ה סלמון לימונית"] },
+  { c: "salads", q: "איך מגישים את סלט עוף הדרים בגרסה טבעונית?", a: "ללא העוף, עם פטריות פורטובלו בגריל", w: ["עם טופו בגריל במקום העוף", "ללא העוף, עם חציל קלוי", "עם המבורגר טבעוני פרוס"] },
+  { c: "salads", q: "איך הופכים את בורגול לאבנה לטבעוני?", a: "ללא הלאבנה", w: ["ללא השקדים", "עם טחינה במקום לאבנה", "אי אפשר"] },
+  { c: "salads", q: "איך הופכים את כל ישראלי לטבעוני?", a: "ללא הגבינה", w: ["ללא הזיתים", "ללא הויניגרט", "עם טחינה"] },
+  { c: "salads", q: "איזה סלט טבעוני כמו שהוא?", a: "אגוזים, שקדים ודברים טובים", w: ["קיסר קלאסי", "סלק ברי ופקאן", "קפרזה מוצרלה פרסקה"] },
+  { c: "mains", q: "איפה מכינים את ההמבורגר הטבעוני?", a: "אפוי בטאבון", w: ["בגריל", "על הפלאנצ'ה", "מטוגן במחבת"] },
+  { c: "mains", q: "על מה מוגש הכבד עוף?", a: "פירה תפו״א ובטטה קטיפתי", w: ["אורז עשבי תיבול ושקדים", "בייבי תפו״א בשום", "ירקות ירוקים מוקפצים"] },
+  { c: "mains", q: "על מה מוגש חזה העוף?", a: "אורז עשבי תיבול ושקדים", w: ["פירה תפו״א ובטטה", "בייבי תפו״א ועשבי תיבול", "ירקות ירוקים מוקפצים"] },
+  { c: "starters", q: "כמה ארנצ'יני יש במנה?", a: "3", w: ["2", "4", "5"] },
+  { c: "starters", q: "במה מטוגנת הכרובית בפרחי כרובית?", a: "קמח מתובל", w: ["פירורי פנקו", "בלילת בירה", "קמח חומוס"] },
+  { c: "starters", q: "איזו מנה ראשונה מסומנת כטבעונית?", a: "פרחי כרובית", w: ["קרפצ'יו חציל בטאבון", "קריספי עלי גפן על לאבנה", "ארטישוק א לה רומאנה"] },
+  { c: "brunch", q: "כמה ביצים יש בשקשוקה?", a: "2", w: ["1", "3", "4"] },
+  { c: "brunch", q: "מה ההבדל בין שקשוקה כפרית לשקשוקה אדומה?", a: "בכפרית יש גם תרד, מיקס פטריות, שום וקרם שמנת", w: ["בכפרית יש גם גבינה בולגרית וזיתים", "בכפרית יש 3 ביצים", "הכפרית מוגשת עם פוקאצ'ה במקום חלה"] },
+  { c: "brunch", q: "עם מה מוגשות השקשוקות?", a: "סלט ירקות, טחינה, זיתים מתובלים וחלה", w: ["סלט ירקות, לאבנה ופוקאצ'ה", "טחינה, סלסת עגבניות ולחם קסטן", "סלט ירקות, חמאה וריבה"] },
+  { c: "breakfast", q: "אילו סוגי ביצים אפשר לבחור בבוקר טוב לשניים?", a: "מקושקשת / חביתה / עין / עין הפוכה", w: ["מקושקשת / חביתה / עלומה / קשה", "עין / עין הפוכה / קשה / רכה", "מקושקשת / עין / עלומה / חביתת ירק"] },
+  { c: "breakfast", q: "מה התוספות בתשלום בבוקר טוב לשניים?", a: "פרמז'ן / מיקס פטריות / בולגרית / צהובה", w: ["אבוקדו / סלמון / בולגרית / צהובה", "עשבי תיבול / בצל / פטריות / פרמז'ן", "ביצה נוספת / בולגרית / אבוקדו / טונה"] },
+  { c: "breakfast", q: "מה התוספות שאפשר לבחור בבוקר טוב לשניים בלי תשלום?", a: "עשבי תיבול / בצל", w: ["פטריות / בצל", "פרמז'ן / עשבי תיבול", "עגבניה / בצל"] },
+  { c: "breakfast", q: "איזו שתיה חמה אפשר לבחור בבוקר טוב לשניים?", a: "קפוצ'ינו / אספרסו / תה", w: ["קפוצ'ינו / אמריקנו / תה", "כל שתיה חמה מהתפריט", "קפוצ'ינו / לאטה / שוקו"] },
+  { c: "breakfast", q: "איזו שתיה קרה אפשר לבחור בארוחות הבוקר?", a: "לימונדה / תפוזים טבעי / גזר טבעי", w: ["לימונדה / תפוזים / תפוחים", "לימונענע / תפוזים טבעי / קולה", "כל משקה קר"] },
+  { c: "breakfast", q: "על איזה חלב מוגש הקפוצ'ינו בבוקר ללוש טבעוני?", a: "חלב סויה", w: ["חלב שיבולת שועל", "חלב שקדים", "חלב רגיל"] },
+  { c: "breakfast", q: "מאיזה קמח החביתה בבוקר ללוש טבעוני?", a: "קמח עדשים אדומות (עם גזר ופטרוזיליה)", w: ["קמח חומוס (עם בצל ירוק)", "קמח תירס (עם עשבי תיבול)", "קמח כוסמין (עם תרד)"] },
+  { c: "breakfast", q: "אילו לחמים אפשר לבחור בבוקר טוב לשניים?", a: "פוקאצ'ה / לחם לבן / מלא", w: ["חלה / לחם לבן / מלא", "פוקאצ'ה / בריוש / קסטן", "לחם לבן / מלא / שיפון"] },
+  { c: "breakfast", q: "איזה לחם יש באגז בנדיקט ובפרנצ'טוסט?", a: "לחם בריוש קלוי בחמאה", w: ["חלה קלויה", "לחם קסטן", "פוקאצ'ה"] },
+];
+
+</script>
+<script>
+"use strict";
+// ================= state =================
+const LS = "lalush-trainer-v1";
+const S = Object.assign({ m:{}, xp:0, best:{sprint:0, exam:0}, day:{last:"", count:0}, cats:null, sound:true, answered:0, correct:0, lessons:{} },
+  (() => { try { return JSON.parse(localStorage.getItem(LS) || "{}"); } catch (e) { return {}; } })());
+const save = () => { try { localStorage.setItem(LS, JSON.stringify(S)); } catch (e) {} };
+
+const CAT = Object.fromEntries(CATS.map(c => [c.id, c]));
+S.cats = (S.cats || []).filter(id => CAT[id]);
+if (!S.cats.length) S.cats = CATS.map(c => c.id);
+S.lessons = S.lessons || {};
+const FACTS2 = FACTS.map((f, k) => ({ ...f, id: "f" + k, fact: 1 }));
+const $app = document.getElementById("app");
+
+// ================= helpers =================
+const rnd = n => Math.floor(Math.random() * n);
+const pick = a => a[rnd(a.length)];
+const shuffle = a => { a = a.slice(); for (let k = a.length - 1; k > 0; k--) { const j = rnd(k + 1); [a[k], a[j]] = [a[j], a[k]]; } return a; };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]));
+const mastery = id => S.m[id] || 0;
+const MAXM = 4;
+const STOP = new Set(["על","עם","של","טרי","טריה","טריות","טריים","קלוי","קלויה","קלויים","צלוי","מגורר","מבחר","מיקס","קרם","רוטב","גבינת","זילופי","עלי","בצל","ממרח","קוביות","ביתי","עשבי","לבחירה","מוקפצים","דק","המון","פרוס","תיבול"]);
+const words = s => s.replace(/[(),./]/g, " ").split(/\s+/).filter(w => w.length > 2 && !STOP.has(w));
+function similar(a, b) {
+  if (a === b || a.includes(b) || b.includes(a)) return true;
+  const wa = words(a), wb = new Set(words(b));
+  return wa.some(w => wb.has(w));
+}
+const hasIng = (d, ing) => (d.i || []).some(x => similar(x, ing));
+const enabledDishes = () => DISHES.filter(d => S.cats.includes(d.c));
+const enabledFacts = () => FACTS2.filter(f => S.cats.includes(f.c));
+const dots = m => `<span class="dots">${"●".repeat(m)}${"○".repeat(MAXM - m)}</span>`;
+
+// ================= memory aids =================
+// Signature = ingredients no other dish has. Twin = the dish it's easiest to confuse it with.
+const SIG = {}, TWIN = {};
+DISHES.forEach(d => {
+  SIG[d.id] = (d.i || []).filter(ing => !DISHES.some(o => o !== d && hasIng(o, ing)));
+  let best = null;
+  const strict = (x, y) => x === y || x.includes(y) || y.includes(x);
+  const has = (dd, ing) => dd.i.some(x => strict(x, ing));
+  DISHES.forEach(o => {
+    if (o === d || !o.i || !d.i) return;
+    const shared = d.i.filter(x => has(o, x));
+    const raw = shared.length / Math.min(d.i.length, o.i.length);
+    if (o.c !== d.c && raw < .75) return;
+    const score = raw + (o.c === d.c ? .25 : 0);
+    if (shared.length >= 2 && (!best || score > best.score)) best = { o, score };
+  });
+  if (best && best.score >= .6) {
+    const here = d.i.filter(x => !has(best.o, x)), there = best.o.i.filter(x => !has(d, x));
+    if (here.length || there.length) TWIN[d.id] = { o: best.o, here: here.slice(0, 6), there: there.slice(0, 6) };
+  }
+});
+const acronym = d => (d.i || []).map(x => x.replace(/^[0-9 ]+/, "").trim()[0]).join(" · ");
+
+function aidsHTML(d) {
+  const sig = SIG[d.id] || [], tw = TWIN[d.id];
+  let h = `<div class="aid"><b>🔤 ראשי תיבות לזכירה:</b> <span class="acr">${esc(acronym(d))}</span> <small>(${d.i.length} רכיבים)</small></div>`;
+  if (sig.length) h += `<div class="aid"><b>⭐ רק במנה הזו בכל התפריט:</b> ${sig.map(esc).join(", ")}</div>`;
+  if (tw) h += `<div class="aid warn"><b>⚠️ אל תתבלבלי עם ${esc(tw.o.n)}</b>
+    ${tw.here.length ? `<div>✓ רק כאן: ${tw.here.map(esc).join(", ")}</div>` : ""}
+    ${tw.there.length ? `<div>✗ רק שם: ${tw.there.map(esc).join(", ")}</div>` : ""}</div>`;
+  return h;
+}
+const ingChips = d => `<div class="chips num">${d.i.map((t, k) => `<span class="chip ro ${SIG[d.id].includes(t) ? "sig" : ""}"><i>${k + 1}</i>${esc(t)}</span>`).join("")}</div>`;
+
+// ================= progress =================
+function bump(id, ok) {
+  const m = mastery(id);
+  S.m[id] = ok ? Math.min(MAXM, m + 1) : Math.max(0, m - 2);
+  S.answered++; if (ok) S.correct++;
+  save();
+}
+function addXP(n, el) {
+  S.xp += n; save();
+  if (el && n > 0) {
+    const r = el.getBoundingClientRect();
+    const f = document.createElement("div");
+    f.className = "xpfly"; f.textContent = "+" + n + " XP";
+    f.style.left = (r.left + r.width / 2 - 30) + "px"; f.style.top = (r.top) + "px";
+    document.body.appendChild(f); setTimeout(() => f.remove(), 1000);
+  }
+}
+const LEVELS = [
+  [0, "מתלמדת 🌱"], [150, "מלצרית מתחילה 🍽️"], [400, "מכירה את המטבח 👩‍🍳"], [800, "מלצרית מנוסה ⭐"],
+  [1400, "מומחית תפריט 🏅"], [2200, "אלופת ללוש 👑"], [3500, "אגדה של חולון 🔥"]];
+function level() {
+  let k = 0; while (k + 1 < LEVELS.length && S.xp >= LEVELS[k + 1][0]) k++;
+  const cur = LEVELS[k][0], nxt = LEVELS[k + 1] ? LEVELS[k + 1][0] : cur + 1000;
+  return { n: k + 1, name: LEVELS[k][1], pct: Math.min(100, (S.xp - cur) / (nxt - cur) * 100), next: nxt };
+}
+function touchDay() {
+  const today = new Date().toDateString();
+  if (S.day.last === today) return;
+  const y = new Date(Date.now() - 864e5).toDateString();
+  S.day.count = S.day.last === y ? S.day.count + 1 : 1;
+  S.day.last = today; save();
+}
+function catPct(cid) {
+  const items = DISHES.filter(d => d.c === cid).map(d => d.id).concat(FACTS2.filter(f => f.c === cid).map(f => f.id));
+  if (!items.length) return 0;
+  return Math.round(items.reduce((s, id) => s + mastery(id), 0) / (items.length * MAXM) * 100);
+}
+function totalPct() {
+  const ids = DISHES.map(d => d.id).concat(FACTS2.map(f => f.id));
+  return Math.round(ids.reduce((s, id) => s + mastery(id), 0) / (ids.length * MAXM) * 100);
+}
+function toast(t) {
+  const d = document.createElement("div"); d.className = "toast"; d.textContent = t;
+  document.body.appendChild(d); setTimeout(() => d.remove(), 1800);
+}
+
+// ================= sound + confetti =================
+let AC;
+function beep(kind) {
+  if (!S.sound) return;
+  try {
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    const seq = { ok: [[660, .07], [880, .12]], bad: [[220, .18]], win: [[523, .1], [659, .1], [784, .1], [1046, .25]], tick: [[900, .03]] }[kind];
+    let t = AC.currentTime;
+    seq.forEach(([f, d]) => {
+      const o = AC.createOscillator(), g = AC.createGain();
+      o.type = kind === "bad" ? "sawtooth" : "triangle"; o.frequency.value = f;
+      g.gain.setValueAtTime(.14, t); g.gain.exponentialRampToValueAtTime(.001, t + d);
+      o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + d + .02); t += d * .9;
+    });
+  } catch (e) {}
+  try { if (navigator.vibrate && navigator.userActivation && navigator.userActivation.hasBeenActive) navigator.vibrate(kind === "bad" ? [60, 40, 60] : kind === "ok" ? 15 : 0); } catch (e) {}
+}
+const cf = document.getElementById("cf"), cx = cf.getContext("2d"); let parts = [], cfOn = false;
+function confetti(n = 120) {
+  cf.width = innerWidth; cf.height = innerHeight;
+  const cols = ["#d79a2b", "#f0c15c", "#2f5d6e", "#2e9e6a", "#e0561e", "#ffffff"];
+  for (let k = 0; k < n; k++) parts.push({ x: innerWidth / 2 + (Math.random() - .5) * 200, y: innerHeight * .35, vx: (Math.random() - .5) * 14, vy: -Math.random() * 14 - 4, r: Math.random() * 6 + 4, c: pick(cols), a: Math.random() * 6, life: 120 });
+  if (!cfOn) { cfOn = true; requestAnimationFrame(cfLoop); }
+}
+function cfLoop() {
+  cx.clearRect(0, 0, cf.width, cf.height);
+  parts.forEach(p => { p.vy += .35; p.x += p.vx; p.y += p.vy; p.a += .2; p.life--; cx.save(); cx.translate(p.x, p.y); cx.rotate(p.a); cx.fillStyle = p.c; cx.fillRect(-p.r / 2, -p.r / 4, p.r, p.r / 2); cx.restore(); });
+  parts = parts.filter(p => p.life > 0 && p.y < cf.height + 20);
+  if (parts.length) requestAnimationFrame(cfLoop); else { cfOn = false; cx.clearRect(0, 0, cf.width, cf.height); }
+}
+
+// ================= question generation =================
+function weightedPick(items) {
+  const w = items.map(it => { const m = mastery(it.id); return ((MAXM + 1 - m) ** 2 + (S.m[it.id] === undefined ? 3 : 0)) * (it.fact ? .6 : 1); });
+  let r = Math.random() * w.reduce((a, b) => a + b, 0);
+  for (let k = 0; k < items.length; k++) { r -= w[k]; if (r <= 0) return items[k]; }
+  return items[items.length - 1];
+}
+function peers(d, pool, n, filter) {
+  const same = shuffle(pool.filter(x => x !== d && x.c === d.c && (!filter || filter(x))));
+  const other = shuffle(pool.filter(x => x !== d && x.c !== d.c && (!filter || filter(x))));
+  return same.concat(other).slice(0, n);
+}
+function distractors(d, n) {
+  // Prefer ingredients from the same category and from its "twin" so the wrong answers are believable.
+  const tw = TWIN[d.id] ? TWIN[d.id].o.i : [];
+  const sameCat = DISHES.filter(x => x !== d && x.c === d.c && x.i).flatMap(x => x.i);
+  const rest = DISHES.filter(x => x !== d && x.c !== d.c && x.i).flatMap(x => x.i);
+  const near = shuffle(tw).concat(shuffle(sameCat), shuffle(rest));
+  const out = [];
+  for (const ing of near) {
+    if (out.length >= n) break;
+    if (!hasIng(d, ing) && !out.some(o => similar(o, ing))) out.push(ing);
+  }
+  return out;
+}
+const TYPES = {
+  name: d => d.i && d.i.length >= 2,
+  build: d => d.i && d.i.length >= 3,
+  odd: d => d.i && d.i.length >= 3,
+  tf: d => d.i && d.i.length >= 2,
+  cloze: d => d.i && d.i.length >= 2,
+  which: d => d.i && d.i.length >= 2,
+  vegan: d => !!d.v,
+};
+const TYPE_W = { name: 2, build: 4, odd: 2, tf: 2, cloze: 3, which: 2, vegan: 1 };
+
+function makeQ(d, allowed) {
+  if (d.fact) return factQ(d);
+  const types = Object.keys(TYPES).filter(t => TYPES[t](d) && (!allowed || allowed.includes(t)));
+  for (let tries = 0; tries < 4 && types.length; tries++) {
+    let r = Math.random() * types.reduce((s, t) => s + TYPE_W[t], 0), t = types[0];
+    for (const x of types) { r -= TYPE_W[x]; if (r <= 0) { t = x; break; } }
+    const q = GEN[t](d);
+    if (q) return q;
+  }
+  return null;
+}
+function factQ(f) {
+  return { kind: "opts", item: f, label: "שאלת ידע 🧠", text: f.q,
+    opts: shuffle([{ t: f.a, ok: 1 }].concat(f.w.map(t => ({ t })))), answer: f.a };
+}
+const dishTag = d => "<span class='qdish'>" + esc(d.n) + "</span>";
+const GEN = {
+  name(d) {
+    const others = peers(d, DISHES.filter(x => x.i && x.i.length >= 2), 3);
+    if (others.length < 3) return null;
+    return { kind: "opts", item: d, label: "איזו מנה זו? 🔎", text: "איזו מנה מכילה את כל אלה?",
+      ings: d.i.join(" · "), opts: shuffle([{ t: d.n, ok: 1 }].concat(others.map(o => ({ t: o.n })))), answer: d.n };
+  },
+  build(d, all) {
+    const real = all ? d.i.slice() : shuffle(d.i).slice(0, 8);
+    const fake = distractors(d, Math.max(4, 12 - real.length));
+    if (fake.length < 3) return null;
+    return { kind: "build", item: d, label: "בני את המנה 🧩", text: d.n,
+      sub: "סמני את כל מה שנמצא במנה (" + real.length + " נכונים מסתתרים כאן)",
+      chips: shuffle(real.map(t => ({ t, ok: 1 })).concat(fake.map(t => ({ t })))), answer: d.i.join(", ") };
+  },
+  cloze(d) {
+    const k = rnd(d.i.length), fake = distractors(d, 3);
+    if (fake.length < 3) return null;
+    const list = d.i.map((t, j) => j === k ? `<span class="chip blank">❓</span>` : `<span class="chip ro">${esc(t)}</span>`).join("");
+    return { kind: "opts", item: d, label: "השלימי את החסר ✍️", html: 1, text: "מה חסר ב" + dishTag(d) + "?",
+      pre: `<div class="chips" style="margin:10px 0 14px">${list}</div>`,
+      opts: shuffle([{ t: d.i[k], ok: 1 }].concat(fake.map(t => ({ t })))), answer: d.i[k] };
+  },
+  missing(d) {
+    const k = rnd(d.i.length), fake = distractors(d, 3);
+    if (fake.length < 3) return null;
+    const rest = shuffle(d.i.filter((_, j) => j !== k));
+    return { kind: "opts", item: d, label: "מה נעלם? 🕳️", html: 1, text: "ב" + dishTag(d) + " יש " + d.i.length + " רכיבים. אחד נעלם, מה הוא?",
+      pre: `<div class="chips" style="margin:10px 0 14px">${rest.map(t => `<span class="chip ro">${esc(t)}</span>`).join("")}</div>`,
+      opts: shuffle([{ t: d.i[k], ok: 1 }].concat(fake.map(t => ({ t })))), answer: d.i[k] };
+  },
+  odd(d) {
+    const real = shuffle(d.i).slice(0, 3), fake = distractors(d, 1);
+    if (!fake.length) return null;
+    return { kind: "opts", item: d, label: "מי לא שייך? 🕵️‍♀️", text: "מה מהבאים לא נמצא ב" + dishTag(d) + "?",
+      html: 1, opts: shuffle(real.map(t => ({ t })).concat([{ t: fake[0], ok: 1 }])), answer: fake[0] + " (לא במנה)" };
+  },
+  tf(d) {
+    const truth = Math.random() < .5;
+    const ing = truth ? pick(d.i) : distractors(d, 1)[0];
+    if (!ing) return null;
+    return { kind: "tf", item: d, label: "נכון או לא? ⚡", html: 1,
+      text: "יש <u>" + esc(ing) + "</u> ב" + dishTag(d) + "?",
+      opts: [{ t: "כן ✓", ok: truth ? 1 : 0 }, { t: "לא ✗", ok: truth ? 0 : 1 }], answer: truth ? "כן, יש" : "לא, אין" };
+  },
+  which(d, pool) {
+    pool = pool || enabledDishes().filter(x => x.i);
+    const cands = shuffle(d.i).map(ing => ({ ing, n: pool.filter(x => hasIng(x, ing)).length })).sort((a, b) => a.n - b.n);
+    for (const { ing } of cands) {
+      let others = shuffle(pool.filter(x => x !== d && !hasIng(x, ing))).slice(0, 3);
+      if (others.length < 3) others = others.concat(peers(d, DISHES.filter(x => x.i && !others.includes(x)), 3 - others.length, x => !hasIng(x, ing)));
+      if (others.length === 3)
+        return { kind: "opts", item: d, label: "איפה זה מסתתר? 🗺️", html: 1,
+          text: "באיזו מנה יש <u>" + esc(ing) + "</u>?", opts: shuffle([{ t: d.n, ok: 1 }].concat(others.map(o => ({ t: o.n })))), answer: d.n };
+    }
+    return null;
+  },
+  vegan(d) {
+    const others = peers(d, enabledDishes(), 3, x => !x.v);
+    if (others.length < 3) return null;
+    return { kind: "opts", item: d, label: "עלה ירוק 🌿", text: "איזו מנה מסומנת בתפריט כטבעונית?",
+      opts: shuffle([{ t: d.n, ok: 1 }].concat(others.map(o => ({ t: o.n })))), answer: d.n };
+  },
+};
+function nextQ(allowed, avoid) {
+  let pool = enabledDishes().filter(d => Object.keys(TYPES).some(t => TYPES[t](d) && (!allowed || allowed.includes(t))));
+  if (!allowed || allowed.includes("fact")) pool = pool.concat(enabledFacts());
+  if (avoid && pool.length > 6) pool = pool.filter(x => !avoid.includes(x.id));
+  for (let tries = 0; tries < 30; tries++) {
+    const q = makeQ(weightedPick(pool), allowed);
+    if (q) return q;
+  }
+  return null;
+}
+
+// ================= learning path =================
+const LESSONS = [];
+CATS.forEach(c => {
+  const ds = DISHES.filter(d => d.c === c.id && d.i && d.i.length >= 2);
+  const chunks = [];
+  for (let k = 0; k < ds.length; k += 3) chunks.push(ds.slice(k, k + 3));
+  if (chunks.length > 1 && chunks[chunks.length - 1].length === 1) chunks[chunks.length - 2].push(...chunks.pop());
+  chunks.forEach((ch, k) => LESSONS.push({ id: c.id + "-" + k, c: c.id, kind: "learn", ds: ch, title: "שיעור " + (k + 1) }));
+  LESSONS.push({ id: c.id + "-r", c: c.id, kind: "review", ds, title: "חזרה על כל ה" + c.name, facts: FACTS2.filter(f => f.c === c.id) });
+});
+const nextLesson = () => LESSONS.find(l => !S.lessons[l.id]) || null;
+const lessonsDone = () => LESSONS.filter(l => S.lessons[l.id]).length;
+
+function path() {
+  const nl = nextLesson();
+  $app.innerHTML = hdr("מסלול לימוד") + `<p class="sub">כל שיעור מלמד 3–4 מנות: קודם מכירים כל מנה, אחר כך משלימים חסרים, ובסוף בונים אותה מאפס. טעות? המנה חוזרת עד שהיא יושבת.</p>
+  <div class="prog" style="margin-bottom:6px"><i style="width:${lessonsDone() / LESSONS.length * 100}%"></i></div>
+  <p class="sub" style="font-size:13px">${lessonsDone()} מתוך ${LESSONS.length} שיעורים</p>
+  ${CATS.map(c => `<div class="sec">${c.emoji} ${c.name}${c.note ? `<small>${esc(c.note)}</small>` : ""}</div>
+    <div class="path">${LESSONS.filter(l => l.c === c.id).map(l => {
+      const st = S.lessons[l.id] || 0, isNext = nl && nl.id === l.id;
+      return `<button class="node ${st ? "done" : ""} ${isNext ? "next" : ""} ${l.kind}" onclick="go('lesson','${l.id}')">
+        <span class="nic">${st ? "⭐".repeat(st) : l.kind === "review" ? "🏁" : isNext ? "▶️" : "📘"}</span>
+        <span class="t"><b>${l.kind === "review" ? l.title : l.title + ": " + l.ds.map(d => esc(d.n)).join(" · ")}</b>
+        <small>${l.kind === "review" ? l.ds.length + " מנות, בלי רמזים" : l.ds.length + " מנות חדשות"}</small></span></button>`;
+    }).join("")}</div>`).join("")}`;
+  const n = document.querySelector(".node.next");
+  if (n) setTimeout(() => n.scrollIntoView({ block: "center", behavior: "smooth" }), 50);
+}
+
+let LZ = null;
+function lesson(id) {
+  const l = LESSONS.find(x => x.id === id);
+  const steps = [];
+  if (l.kind === "learn") {
+    l.ds.forEach(d => {
+      steps.push({ t: "intro", d });
+      steps.push({ t: "cloze", d });
+      steps.push({ t: d.i.length >= 3 ? "missing" : "cloze", d });
+      if (d.i.length >= 3) steps.push({ t: "build", d });
+    });
+    const mixed = [];
+    l.ds.forEach(d => {
+      if (l.ds.length > 1) mixed.push({ t: "which", d });
+      mixed.push({ t: d.i.length >= 3 ? "build" : "cloze", d });
+    });
+    steps.push({ t: "banner", text: "עכשיו מערבבים! 🌀", sub: "כל המנות של השיעור, בלי הכרטיס מול העיניים." });
+    steps.push(...shuffle(mixed));
+  } else {
+    steps.push({ t: "banner", text: "חזרה: " + CAT[l.c].name + " 🏁", sub: "בונים כל מנה מהזיכרון. מה שלא יושב, חוזר בסוף." });
+    const mixed = l.ds.map(d => ({ t: d.i.length >= 3 ? "build" : "cloze", d }));
+    shuffle(l.ds).slice(0, Math.ceil(l.ds.length / 2)).forEach(d => mixed.push({ t: "which", d }));
+    l.facts.forEach(f => mixed.push({ t: "fact", d: f }));
+    steps.push(...shuffle(mixed));
+  }
+  LZ = { l, steps, k: 0, miss: {}, mistakes: 0, xp: 0 };
+  lzStep();
+}
+function lzStep() {
+  const L = LZ;
+  if (L.k >= L.steps.length) return lzFinish();
+  const st = L.steps[L.k], d = st.d;
+  const total = L.steps.length;
+  const head = `<div class="top"><button class="back" onclick="go('path')">→</button><b>${L.l.kind === "review" ? "חזרה" : L.l.title} · ${CAT[L.l.c].emoji}</b><span class="pill">❤️ ${Math.max(0, 3 - L.mistakes)}</span></div>
+    <div class="qhead"><div class="prog"><i style="width:${L.k / total * 100}%"></i></div></div>`;
+  if (st.t === "banner") {
+    $app.innerHTML = head + `<div class="qcard center"><div style="font-size:54px">🎯</div><h2>${st.text}</h2><p class="sub">${st.sub}</p><button class="btn" onclick="LZ.k++;lzStep()">יאללה ←</button></div>`;
+    return;
+  }
+  if (st.t === "intro") {
+    const c = CAT[d.c];
+    $app.innerHTML = head + `<div class="qcard"><div class="qtype">מנה חדשה 👋 קראי לאט, תגידי בקול</div>
+      <div class="dishname"><span>${esc(d.n)}</span></div>
+      <div class="tags">${tagsHTML(d)}</div>
+      <p class="sub" style="margin:10px 0 6px">${d.i.length} רכיבים, לפי הסדר בתפריט:</p>
+      ${ingChips(d)}
+      ${aidsHTML(d)}
+      ${(d.x || []).map(x => `<div class="note">${esc(x)}</div>`).join("")}
+      ${c.note ? `<div class="note teal">כל ה${c.name}: ${esc(c.note)}</div>` : ""}
+      <button class="btn" onclick="LZ.k++;lzStep()">הבנתי, בואי נתרגל ←</button></div>`;
+    return;
+  }
+  let q = null;
+  if (st.t === "fact") q = factQ(d);
+  else if (st.t === "which") q = GEN.which(d, L.l.ds.length > 1 ? L.l.ds : null) || GEN.cloze(d);
+  else if (st.t === "build") q = GEN.build(d, true);
+  else q = GEN[st.t](d) || GEN.cloze(d);
+  if (!q) { L.k++; return lzStep(); }
+  L.q = q; L.answered = false;
+  $app.innerHTML = head + qcardHTML(q, "lzAnswer", "lzBuild");
+}
+function lzAnswer(k) { if (LZ.answered) return; LZ.answered = true; markOpts(LZ.q, k); lzResolve(!!LZ.q.opts[k].ok, document.querySelectorAll(".opt")[k]); }
+function lzBuild() { if (LZ.answered) return; LZ.answered = true; const r = markBuild(LZ.q); lzResolve(r.ok, document.getElementById("chips"), r.extra); }
+function lzResolve(ok, el, extra = "") {
+  const L = LZ, st = L.steps[L.k], q = L.q;
+  if (ok) { L.xp += 8; addXP(8, el); beep("ok"); }
+  else {
+    beep("bad"); L.mistakes++; L.miss[q.item.id] = 1;
+    // Wrong → see the dish again, then the same kind of exercise comes back later.
+    if (!q.item.fact && L.l.kind === "learn") L.steps.push({ t: "intro", d: q.item, again: 1 });
+    L.steps.push({ t: st.t === "intro" ? "cloze" : st.t, d: st.d });
+  }
+  const d = q.item;
+  const learn = d.fact ? `<div class="mini"><b>התשובה:</b> ${esc(d.a)}</div>` : `<div class="mini"><b>${esc(d.n)}:</b>${ingChips(d)}</div>`;
+  document.getElementById("fb").innerHTML = `<div class="fb ${ok ? "ok" : "no"}"><div class="t">${ok ? pick(PRAISE) : pick(OOPS)}</div>${extra}${!ok && q.kind !== "build" ? `<div><b>התשובה הנכונה:</b> ${esc(q.answer)}</div>` : ""}${ok && q.kind !== "build" ? "" : learn}${!ok ? `<div style="font-size:13px;margin-top:6px">🔁 המנה הזו תחזור עוד בשיעור</div>` : ""}</div>
+    <button class="btn ${ok ? "" : "gold"}" id="nx" onclick="LZ.k++;lzStep()">המשך ←</button>`;
+  document.getElementById("nx").scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+function lzFinish() {
+  const L = LZ, stars = L.mistakes === 0 ? 3 : L.mistakes <= 2 ? 2 : 1;
+  S.lessons[L.l.id] = Math.max(S.lessons[L.l.id] || 0, stars);
+  L.l.ds.forEach(d => { if (!L.miss[d.id]) S.m[d.id] = Math.min(MAXM, mastery(d.id) + (L.l.kind === "review" ? 2 : 1)); });
+  (L.l.facts || []).forEach(f => { if (!L.miss[f.id]) S.m[f.id] = Math.min(MAXM, mastery(f.id) + 1); });
+  addXP(20); save(); confetti(140); beep("win");
+  const nl = nextLesson();
+  $app.innerHTML = hdr("שיעור הושלם") + `<div class="qcard center"><div style="font-size:52px;letter-spacing:6px">${"⭐".repeat(stars)}${"☆".repeat(3 - stars)}</div>
+    <h2>${stars === 3 ? "מושלם! בלי אף טעות 👑" : stars === 2 ? "יפה מאוד! 💪" : "סיימת! כדאי לעשות שוב 🔁"}</h2>
+    <p class="sub">${L.l.ds.map(d => esc(d.n)).join(" · ")}</p>
+    <p class="sub">+${L.xp + 20} XP · טעויות: ${L.mistakes}</p>
+    ${nl ? `<button class="btn gold" onclick="go('lesson','${nl.id}')">לשיעור הבא ←</button>` : `<p class="sub">סיימת את כל המסלול! 🎓 עכשיו סימולציית מבחן.</p><button class="btn gold" onclick="go('quiz',{mode:'exam'})">סימולציית מבחן 📝</button>`}
+    <button class="btn ghost" onclick="go('lesson','${L.l.id}')">לעשות שוב את השיעור</button>
+    <button class="btn ghost" onclick="go('path')">חזרה למסלול</button></div>`;
+  LZ = null;
+}
+
+// ================= shared question UI =================
+function qcardHTML(q, onAns, onBuild) {
+  const text = q.html ? q.text : esc(q.text);
+  let body;
+  if (q.kind === "build") {
+    body = `<div class="qsub">${esc(q.sub)}</div><div class="chips" id="chips">${q.chips.map((c, k) => `<button class="chip" data-k="${k}" onclick="this.classList.toggle('on')">${esc(c.t)}</button>`).join("")}</div>
+      <button class="btn" id="chk" onclick="${onBuild}()">בדיקה</button>`;
+  } else {
+    body = (q.ings ? `<div class="ings">${esc(q.ings)}</div>` : "") + (q.pre || "") +
+      `<div class="${q.kind === "tf" ? "tf" : "opts"}">${q.opts.map((o, k) => `<button class="opt" data-k="${k}" onclick="${onAns}(${k})">${esc(o.t)}</button>`).join("")}</div>`;
+  }
+  return `<div class="qcard"><div class="qtype">${q.label}</div>
+  <div class="qtext">${q.kind === "build" ? `<span class="qdish" style="font-size:22px">${esc(q.text)}</span>` : text}</div>${body}<div id="fb"></div></div>`;
+}
+function markOpts(q, k) {
+  document.querySelectorAll(".opt").forEach((b, j) => {
+    b.disabled = true;
+    if (q.opts[j].ok) b.classList.add("good"); else if (j === k) b.classList.add("bad"); else b.classList.add("dim");
+  });
+}
+function markBuild(q) {
+  let hit = 0, wrong = 0, miss = 0;
+  document.querySelectorAll("#chips .chip").forEach(b => {
+    const c = q.chips[+b.dataset.k], on = b.classList.contains("on");
+    b.classList.remove("on"); b.disabled = true;
+    if (c.ok && on) { b.classList.add("good"); hit++; }
+    else if (c.ok) { b.classList.add("miss"); miss++; }
+    else if (on) { b.classList.add("bad"); wrong++; }
+  });
+  document.getElementById("chk").remove();
+  const ok = !wrong && !miss;
+  const extra = ok ? "" : `<div style="font-size:14px;margin-top:4px">✓ ${hit} נכונים${miss ? " · ⚠️ פספסת " + miss + " (בכתום)" : ""}${wrong ? " · ✗ " + wrong + " לא שייכים (באדום)" : ""}</div>`;
+  return { ok, hit, wrong, miss, extra };
+}
+const PRAISE = ["מושלם! 🎉", "יאללה! 🔥", "בדיוק! ✨", "את תותחית! 💪", "נכון מאוד! 👏", "שף מחבק אותך 👨‍🍳", "בול! 🎯"];
+const OOPS = ["כמעט… 🤏", "לא נורא, עכשיו תזכרי 💡", "אופס 🙈", "זה יחזור אלייך עוד מעט 🔁"];
+
+// ================= views =================
+let stopTimer = null;
+function go(v, arg) {
+  if (stopTimer) { stopTimer(); stopTimer = null; }
+  window.scrollTo(0, 0);
+  ({ home, study, deck, menu, quiz, settings, path, lesson })[v](arg);
+}
+const hdr = (title, right = "") => `<div class="top"><button class="back" onclick="go('home')">→</button><b style="font-size:18px">${title}</b><div>${right}</div></div>`;
+const tagsHTML = d => `${d.v ? '<span class="tag">🌿 טבעוני</span>' : ""}${d.h ? '<span class="tag h">🌶️ חריף</span>' : ""}${d.b ? '<span class="tag b">☀️ גם בתפריט בוקר</span>' : ""}<span class="tag" style="background:#eef4f6;color:var(--teal)">${CAT[d.c].emoji} ${CAT[d.c].name}</span>`;
+
+function home() {
+  touchDay();
+  const L = level(), tp = totalPct(), nl = nextLesson();
+  const acc = S.answered ? Math.round(S.correct / S.answered * 100) : 0;
+  const weakest = CATS.filter(c => S.cats.includes(c.id)).map(c => [c, catPct(c.id)]).sort((a, b) => a[1] - b[1])[0];
+  $app.innerHTML = `
+  <div class="top"><div class="logo">CAFÉ<span>LÁ</span>LUSH</div><div class="pill">🔥 ${S.day.count} ${S.day.count === 1 ? "יום" : "ימים"} ברצף</div></div>
+  <h1>היי שחר 👋</h1>
+  <p class="sub">בואי נכיר את התפריט עד הפרט האחרון. המבחן הזה שלך.</p>
+  <div class="hero">
+    <div style="font-size:13px;opacity:.85">רמה ${L.n}</div>
+    <div style="font-size:22px;font-weight:900">${L.name}</div>
+    <div class="lvlbar"><i style="width:${L.pct}%"></i></div>
+    <div style="font-size:12px;opacity:.8;margin-top:4px">${S.xp} / ${L.next} XP</div>
+    <div class="row">
+      <div class="stat"><b>${tp}%</b>שליטה בתפריט</div>
+      <div class="stat"><b>${lessonsDone()}/${LESSONS.length}</b>שיעורים</div>
+      <div class="stat"><b>${acc}%</b>דיוק</div>
+      <div class="stat"><b>${S.best.exam}%</b>מבחן הכי טוב</div>
+    </div>
+  </div>
+  <button class="learnbtn" onclick="${nl ? `go('lesson','${nl.id}')` : `go('path')`}">
+    <div class="ic">📚</div><div style="flex:1"><small>${nl ? (lessonsDone() ? "להמשיך מאיפה שעצרת" : "מתחילים מכאן") : "סיימת את כל המסלול 🎓"}</small>
+    <b>${nl ? `${CAT[nl.c].emoji} ${CAT[nl.c].name} · ${nl.kind === "review" ? "חזרה" : nl.title}` : "מסלול לימוד"}</b>
+    <small>${nl ? (nl.kind === "review" ? "כל המנות בקטגוריה, מהזיכרון" : nl.ds.map(d => esc(d.n)).join(" · ")) : "אפשר לחזור לכל שיעור"}</small></div><div class="go">←</div></button>
+  <button class="cat" style="margin-top:10px" onclick="go('path')"><span class="em">🗺️</span><span class="t"><b>כל המסלול</b><small>${lessonsDone()} מתוך ${LESSONS.length} שיעורים</small><div class="bar"><i style="width:${lessonsDone() / LESSONS.length * 100}%"></i></div></span></button>
+  <div class="grid">
+    <button class="mode" onclick="go('study')"><div class="ic">🃏</div><b>כרטיסיות</b><small>שם המנה, נזכרים, וחושפים רכיב-רכיב.</small></button>
+    <button class="mode" onclick="go('quiz',{mode:'build'})"><div class="ic">🧩</div><b>בני את המנה</b><small>הכי קרוב למבחן: לזכור כל רכיב.</small></button>
+    <button class="mode" onclick="go('quiz',{mode:'practice'})"><div class="ic">🎯</div><b>אימון חכם</b><small>שאלות מעורבות. מה שקשה חוזר יותר.</small></button>
+    <button class="mode" onclick="go('quiz',{mode:'exam'})"><div class="ic">📝</div><b>סימולציית מבחן</b><small>25 שאלות, ציון, וחזרה על הטעויות.</small></button>
+    <button class="mode" onclick="go('quiz',{mode:'sprint'})"><div class="ic">⚡</div><b>ספרינט 60 שניות</b><small>כמה תספיקי? טעות = מינוס 3 שניות.</small></button>
+    <button class="mode" onclick="go('menu')"><div class="ic">🔍</div><b>התפריט המלא</b><small>חיפוש מנה או רכיב.</small></button>
+  </div>
+  ${weakest && S.answered > 5 ? `<h2>כדאי לחזק 💪</h2>
+  <button class="cat" onclick="go('quiz',{mode:'practice',only:'${weakest[0].id}'})"><span class="em">${weakest[0].emoji}</span><span class="t"><b>${weakest[0].name}</b><small>אימון ממוקד בקטגוריה</small><div class="bar"><i style="width:${weakest[1]}%"></i></div></span><span class="pct">${weakest[1]}%</span></button>` : ""}
+  <h2>התקדמות לפי קטגוריה</h2>
+  <div class="catlist">${CATS.map(c => `<button class="cat" onclick="go('deck','${c.id}')"><span class="em">${c.emoji}</span><span class="t"><b>${c.name}</b><div class="bar"><i style="width:${catPct(c.id)}%"></i></div></span><span class="pct">${catPct(c.id)}%</span></button>`).join("")}</div>
+  <button class="btn ghost" style="margin-top:18px" onclick="go('settings')">⚙️ הגדרות</button>
+  <div class="foot">ההתקדמות נשמרת במכשיר הזה · בהצלחה במבחן! 🍀</div>`;
+}
+
+function study() {
+  $app.innerHTML = hdr("כרטיסיות") + `<p class="sub">רואים רק את שם המנה. אומרים בקול את כל הרכיבים, ואז חושפים אחד-אחד ובודקים את עצמך.</p>
+  <button class="cat" style="margin-bottom:10px;background:linear-gradient(135deg,#fff6e3,#ffe9bd)" onclick="go('deck','weak')"><span class="em">🎯</span><span class="t"><b>המנות שהכי קשות לי</b><small>15 הכרטיסים עם הכי פחות שליטה</small></span></button>
+  <div class="catlist">${CATS.map(c => `<button class="cat" onclick="go('deck','${c.id}')"><span class="em">${c.emoji}</span><span class="t"><b>${c.name}</b><small>${DISHES.filter(d => d.c === c.id || (c.id === "breakfast" && d.b)).length} מנות${c.note ? " · " + c.note : ""}</small><div class="bar"><i style="width:${catPct(c.id)}%"></i></div></span><span class="pct">${catPct(c.id)}%</span></button>`).join("")}</div>`;
+}
+
+function dishCard(d, opts = {}) {
+  const c = CAT[d.c];
+  return `<div class="dishname"><span>${esc(d.n)}</span></div>
+  <div class="tags">${tagsHTML(d)}</div>
+  ${d.d ? `<div class="desc">${esc(d.d)}</div>` : ""}
+  ${opts.aids && d.i ? aidsHTML(d) : ""}
+  ${(d.x || []).map(x => `<div class="note">${esc(x)}</div>`).join("")}
+  ${c.note && !opts.noCat ? `<div class="note teal">כל ה${c.name}: ${esc(c.note)}</div>` : ""}`;
+}
+
+let D = null;
+function deck(cid) {
+  let items;
+  if (cid === "weak") items = DISHES.filter(d => S.cats.includes(d.c)).sort((a, b) => mastery(a.id) - mastery(b.id) || Math.random() - .5).slice(0, 15);
+  else items = DISHES.filter(d => d.c === cid || (cid === "breakfast" && d.b));
+  D = { cid, items: shuffle(items), k: 0, known: 0 };
+  drawCard();
+}
+function drawCard() {
+  const title = D.cid === "weak" ? "הכי קשות לי" : CAT[D.cid].name;
+  if (D.k >= D.items.length) {
+    confetti(80); beep("win");
+    $app.innerHTML = hdr(title) + `<div class="qcard center"><div style="font-size:60px">🎉</div><h2>סיימת את החבילה!</h2><p class="sub">ידעת ${D.known} כרטיסים בפעם הראשונה</p>
+    <button class="btn" onclick="deck('${D.cid}')">עוד סיבוב (מעורבב)</button>
+    ${D.cid !== "weak" ? `<button class="btn gold" onclick="go('quiz',{mode:'practice',only:'${D.cid}'})">בחני אותי על ${CAT[D.cid].name} 🎯</button>` : ""}
+    <button class="btn ghost" onclick="go('study')">חזרה לקטגוריות</button></div>`;
+    return;
+  }
+  const d = D.items[D.k], m = mastery(d.id);
+  $app.innerHTML = hdr(title, `<span class="pill">${D.k + 1}/${D.items.length}</span>`) + `
+  <div class="prog" style="margin-bottom:12px"><i style="width:${D.k / D.items.length * 100}%"></i></div>
+  <div class="fc" id="fc">
+    <div class="face front" onclick="flipCard()"><div style="font-size:42px">${CAT[d.c].emoji}</div><div class="nm">${esc(d.n)}</div>
+      <div class="hint">אמרי בקול את כל ${d.i.length} הרכיבים<br>👆 הקישי כשאת מוכנה</div>
+      <div class="mast">שליטה: ${dots(m)}</div></div>
+    <div class="face rear">
+      <div class="dishname"><span>${esc(d.n)}</span></div>
+      <p class="sub" style="margin:8px 0">הקישי על כל רכיב כדי לחשוף אותו. כמה ידעת?</p>
+      <div class="chips num" id="hid">${d.i.map((t, k) => `<button class="chip hidden" onclick="this.classList.remove('hidden');this.disabled=true;revealed()"><i>${k + 1}</i><span>${esc(t)}</span></button>`).join("")}</div>
+      <button class="btn ghost" style="margin-top:10px" onclick="document.querySelectorAll('#hid .hidden').forEach(b=>{b.classList.remove('hidden');b.disabled=true});revealed()">גלי הכל</button>
+      <div id="more" style="display:none">${aidsHTML(d)}${(d.x || []).map(x => `<div class="note">${esc(x)}</div>`).join("")}</div>
+    </div>
+  </div>
+  <div class="row2" style="margin-top:14px" id="ans">
+    <button class="btn ghost" style="margin:0;color:var(--bad)" onclick="cardAns(0)">😅 עוד לא</button>
+    <button class="btn" style="margin:0;background:var(--ok)" onclick="cardAns(1)">ידעתי הכל ✓</button>
+  </div>`;
+}
+function flipCard() { document.getElementById("fc").classList.add("flipped"); }
+function revealed() { if (!document.querySelector("#hid .hidden")) document.getElementById("more").style.display = "block"; }
+function cardAns(ok) {
+  const d = D.items[D.k];
+  S.m[d.id] = ok ? Math.min(MAXM, mastery(d.id) + 1) : Math.max(0, mastery(d.id) - 1);
+  if (ok) { D.known++; addXP(3); beep("ok"); } else { beep("tick"); D.items.splice(Math.min(D.items.length, D.k + 4), 0, d); }
+  save(); D.k++; drawCard();
+}
+
+function menu(q = "") {
+  $app.innerHTML = hdr("התפריט המלא") + `<input class="search" id="sq" placeholder="חיפוש מנה או רכיב… (למשל: כמהין)" value="${esc(q)}">
+  <div id="ml"></div>`;
+  const sq = document.getElementById("sq");
+  const draw = () => {
+    const t = sq.value.trim();
+    const match = d => !t || d.n.includes(t) || (d.d || "").includes(t) || (d.i || []).some(x => x.includes(t)) || (d.x || []).some(x => x.includes(t));
+    document.getElementById("ml").innerHTML = CATS.map(c => {
+      const ds = DISHES.filter(d => (d.c === c.id || (c.id === "breakfast" && d.b)) && match(d));
+      if (!ds.length) return "";
+      return `<div class="sec">${c.emoji} ${c.name}${c.note ? `<small>${esc(c.note)}</small>` : ""}</div>` +
+        ds.map(d => `<div class="dish">${dishCard(d, { noCat: 1 })}<div class="mast">שליטה: ${dots(mastery(d.id))}</div></div>`).join("");
+    }).join("") || `<p class="sub center">לא נמצא כלום 🤷‍♀️</p>`;
+  };
+  sq.oninput = draw; draw();
+}
+
+function settings() {
+  const chip = c => `<button class="chip ${S.cats.includes(c.id) ? "on" : ""}" onclick="togCat('${c.id}')">${c.emoji} ${c.name}</button>`;
+  $app.innerHTML = hdr("הגדרות") + `
+  <h2>על מה לשאול אותי?</h2>
+  <p class="sub">האימון, המבחן והספרינט ישאלו רק על הקטגוריות המסומנות.</p>
+  <div class="chips">${CATS.map(chip).join("")}</div>
+  <button class="btn ghost" onclick="S.cats=CATS.map(c=>c.id);save();settings()">סמני הכל</button>
+  <h2>כללי</h2>
+  <div class="toggle" onclick="S.sound=!S.sound;save();settings()"><span>🔊 צלילים ורטט</span><span class="sw ${S.sound ? "on" : ""}"></span></div>
+  <button class="btn ghost" style="color:var(--bad)" onclick="if(confirm('לאפס את כל ההתקדמות?')){try{localStorage.removeItem(LS)}catch(e){}location.reload()}">איפוס כל ההתקדמות</button>`;
+}
+function togCat(id) {
+  const k = S.cats.indexOf(id);
+  if (k >= 0) { if (S.cats.length === 1) return toast("צריך לפחות קטגוריה אחת"); S.cats.splice(k, 1); } else S.cats.push(id);
+  save(); settings();
+}
+
+// ================= quiz engine =================
+let Q = null;
+function quiz(cfg) {
+  const savedCats = S.cats;
+  if (cfg.only) S.cats = [cfg.only];
+  const allowed = { sprint: ["name", "tf", "odd", "which", "cloze", "fact"], build: ["build"] }[cfg.mode] || null;
+  Q = { cfg, allowed, n: 0, right: 0, combo: 0, bestCombo: 0, xp: 0, recent: [], log: [], total: cfg.mode === "exam" ? 25 : 0, time: 60, restoreCats: cfg.only ? savedCats : null };
+  if (cfg.mode === "sprint") {
+    const t0 = Date.now(); let pen = 0;
+    Q.addPenalty = s => pen += s;
+    const iv = setInterval(() => {
+      Q.time = Math.max(0, 60 - Math.floor((Date.now() - t0) / 1000) - pen);
+      const el = document.getElementById("tm");
+      if (el) { el.textContent = Q.time + "s"; el.classList.toggle("low", Q.time <= 10); }
+      if (Q.time <= 0) { clearInterval(iv); stopTimer = null; finish(); }
+    }, 200);
+    stopTimer = () => clearInterval(iv);
+  }
+  const prevStop = stopTimer;
+  stopTimer = () => { prevStop && prevStop(); if (Q && Q.restoreCats) { S.cats = Q.restoreCats; Q.restoreCats = null; save(); } };
+  nextQuestion();
+}
+function nextQuestion() {
+  if (!Q) return;
+  if (Q.total && Q.n >= Q.total) return finish();
+  const q = nextQ(Q.allowed, Q.recent);
+  if (!q) { $app.innerHTML = hdr("אופס") + `<p class="sub">אין מספיק שאלות לקטגוריות שנבחרו. נסי להוסיף קטגוריות בהגדרות.</p>`; return; }
+  Q.cur = q; Q.answered = false;
+  Q.recent.push(q.item.id); if (Q.recent.length > 8) Q.recent.shift();
+  const mode = Q.cfg.mode;
+  const right = mode === "sprint" ? `<span class="timer" id="tm">${Q.time}s</span>` :
+    `<span class="combo ${Q.combo >= 5 ? "hot" : ""}">${Q.combo >= 2 ? "🔥x" + Q.combo : ""}</span>`;
+  const title = { practice: Q.cfg.only ? CAT[Q.cfg.only].name : "אימון חכם", exam: "סימולציית מבחן", sprint: "ספרינט ⚡", build: "בני את המנה" }[mode];
+  const progW = Q.total ? Q.n / Q.total * 100 : mode === "sprint" ? Q.time / 60 * 100 : (Q.combo % 10) * 10;
+  $app.innerHTML = `<div class="top"><button class="back" onclick="${mode === "practice" || mode === "build" ? "finish()" : "go('home')"}">→</button><b>${title}</b><div style="display:flex;gap:6px;align-items:center">${right}<span class="pill">${Q.total ? Q.n + 1 + "/" + Q.total : "✓ " + Q.right}</span></div></div>
+  <div class="qhead"><div class="prog"><i style="width:${progW}%"></i></div></div>` + qcardHTML(q, "answer", "checkBuild");
+}
+function answer(k) {
+  if (Q.answered) return; Q.answered = true;
+  markOpts(Q.cur, k);
+  resolve(!!Q.cur.opts[k].ok, document.querySelectorAll(".opt")[k], Q.cur.opts[k].t);
+}
+function checkBuild() {
+  if (Q.answered) return; Q.answered = true;
+  const r = markBuild(Q.cur);
+  resolve(r.ok, document.getElementById("chips"), r.ok ? "" : `פספוסים: ${r.miss}, מיותרים: ${r.wrong}`, r.extra, r.hit && !r.ok ? Math.max(2, r.hit * 2 - r.wrong * 2) : 0);
+}
+function resolve(ok, el, yourAns, extra = "", partialXP = 0) {
+  const q = Q.cur, mode = Q.cfg.mode;
+  bump(q.item.id, ok); Q.n++;
+  Q.log.push({ q, ok, your: yourAns });
+  if (ok) {
+    Q.right++; Q.combo++; Q.bestCombo = Math.max(Q.bestCombo, Q.combo);
+    const gain = (q.kind === "build" ? 15 : 10) + Math.min(Q.combo, 10);
+    Q.xp += gain; addXP(gain, el); beep("ok");
+    if (Q.combo > 0 && Q.combo % 5 === 0) { confetti(70); toast("🔥 רצף של " + Q.combo + "!"); }
+  } else {
+    Q.combo = 0; beep("bad");
+    if (partialXP) { Q.xp += partialXP; addXP(partialXP, el); }
+    if (mode === "sprint") Q.addPenalty(3);
+  }
+  if (mode === "sprint") return setTimeout(() => Q && Q.cfg.mode === "sprint" && Q.time > 0 && nextQuestion(), ok ? 350 : 900);
+  if (mode === "exam") return setTimeout(() => Q && nextQuestion(), 650);
+  const d = q.item;
+  const learn = d.fact ? `<div class="mini"><b>התשובה:</b> ${esc(d.a)}</div>` : `<div class="mini"><b>${esc(d.n)}:</b>${ingChips(d)}${ok ? "" : aidsHTML(d)}</div>`;
+  document.getElementById("fb").innerHTML = `<div class="fb ${ok ? "ok" : "no"}"><div class="t">${ok ? pick(PRAISE) : pick(OOPS)}</div>${extra}${!ok && q.kind !== "build" ? `<div><b>התשובה הנכונה:</b> ${esc(q.answer)}</div>` : ""}${learn}</div>
+  <button class="btn ${ok ? "" : "gold"}" id="nx" onclick="nextQuestion()">הבא ←</button>`;
+  document.getElementById("nx").scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+function finish() {
+  if (!Q) return go("home");
+  const mode = Q.cfg.mode;
+  const restore = Q.restoreCats; if (restore) { S.cats = restore; Q.restoreCats = null; }
+  if (stopTimer) { stopTimer(); stopTimer = null; }
+  if (!Q.n) { Q = null; return go("home"); }
+  const pct = Math.round(Q.right / Q.n * 100);
+  let headline = "", rec = false;
+  if (mode === "exam") { if (pct > S.best.exam) { S.best.exam = pct; rec = true; } headline = `<div class="score">${pct}%</div><div class="grade">${pct >= 95 ? "מוכנה למבחן! 👑" : pct >= 85 ? "כמעט שם! עוד סיבוב 💪" : pct >= 70 ? "בדרך הנכונה 🌱" : "עוד קצת מסלול לימוד ונחזור 📚"}</div>`; }
+  else if (mode === "sprint") { if (Q.right > S.best.sprint) { S.best.sprint = Q.right; rec = true; } headline = `<div class="score">${Q.right}</div><div class="grade">תשובות נכונות ב-60 שניות${rec ? " · שיא חדש! 🏆" : ""}</div>`; }
+  else headline = `<div class="score">${Q.right}/${Q.n}</div><div class="grade">רצף הכי ארוך: ${Q.bestCombo} 🔥</div>`;
+  save();
+  if (rec || pct >= 90) { confetti(160); beep("win"); }
+  const mistakes = Q.log.filter(l => !l.ok);
+  const cfg = JSON.stringify(Q.cfg).replace(/"/g, "&quot;");
+  $app.innerHTML = hdr("סיכום") + `<div class="qcard">${headline}<p class="sub center">+${Q.xp} XP · רמה: ${level().name}</p>
+    <button class="btn gold" onclick="go('quiz',${cfg})">עוד סיבוב 🔁</button><button class="btn ghost" onclick="go('home')">למסך הבית</button></div>
+    ${mistakes.length ? `<h2>על מה לחזור (${mistakes.length})</h2>` + mistakes.map(l => {
+      const d = l.q.item;
+      const qt = l.q.kind === "build" ? "בני את המנה: " + esc(d.n) : (l.q.html ? l.q.text : esc(l.q.text));
+      return `<div class="mistake"><div class="q">${qt}</div>${l.q.ings ? `<div class="y" style="color:var(--muted)">${esc(l.q.ings)}</div>` : ""}<div class="a">✓ ${esc(l.q.answer)}</div>${l.your ? `<div class="y">✗ ${esc(l.your)}</div>` : ""}${d.fact ? "" : `<div class="mini" style="background:var(--paper2)"><b>${esc(d.n)}:</b>${ingChips(d)}</div>`}</div>`;
+    }).join("") : `<p class="sub center">בלי אף טעות! 🎉</p>`}`;
+  Q = null;
+}
+
+go("home");
+
+</script>
+</body>
+</html>
